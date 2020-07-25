@@ -1,0 +1,79 @@
+.oivolume {
+    &__form-contract {
+        width: 25rem;
+        margin: 2rem;
+    }
+
+    &__form-expiry {
+        width: 25rem;
+        margin: 2rem;
+    }
+
+    &__form-sort {
+        width: 15rem;
+        margin: 2rem;
+    }
+
+    &__contract-name {
+        margin: 2rem;
+    }
+
+    &__table-1{
+        margin-right: 1rem;
+    }
+    
+    &__table-2{
+        margin-right: 1rem;
+    }
+
+    &__row {
+        margin: 0;
+        padding: 0;
+    }
+
+    &__calls-title {
+        text-align: center;
+        font-size: 1.4rem;
+    }
+
+    &__puts-title {
+        text-align: center;
+        font-size: 1.4rem;
+    }
+
+    &__contract-name {
+        margin-bottom: 0;
+    }
+
+    &__contract-timestamp {
+        margin-top: 0;
+    }
+
+    &__calls-itm {
+        font-size: 1.2rem;
+        float: right;
+        margin-top: 28%;
+        margin-right: 1rem;
+    }
+
+    &__calls-otm {
+        font-size: 1.2rem;
+        float: right;
+        margin-top: 15%;
+        margin-right: 1rem;
+    }
+
+    &__puts-itm {
+        font-size: 1.2rem;
+        float: left;
+        margin-top: 15%;
+        margin-left: 1rem;
+    }
+
+    &__puts-otm {
+        font-size: 1.2rem;
+        float: left;
+        margin-top: 28%;
+        margin-left: 1rem;
+    }
+}

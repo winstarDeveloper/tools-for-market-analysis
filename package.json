@@ -10,7 +10,8 @@
         "eject": "react-scripts eject",
         "lint": "eslint src",
         "format": "prettier --write \"src/**/*.{js,css,scss,html}\"",
-        "rtl": "webpack"
+        "rtl": "webpack",
+        "compile:sass": "node-sass src/css/sass/main.scss src/css/styles.css -w"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -71,6 +72,7 @@
         "react-inlinesvg": "1.2.0",
         "react-intl": "3.6.2",
         "react-is": "16.13.1",
+        "react-loadingg": "^1.7.2",
         "react-perfect-scrollbar": "1.5.8",
         "react-portal": "4.2.0",
         "react-redux": "7.1.3",

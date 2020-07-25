@@ -1,0 +1,42 @@
+.spotfuturespread {
+    &__search-input{
+        width: 30rem;
+        margin: auto;
+        margin-bottom: 2rem;
+    }
+
+    &__spot {
+        margin: 2rem;
+    }
+
+    &__future {
+        margin: 2rem;
+    }
+
+    &__premium-discount {
+        margin-top: 2rem;
+    }
+
+    &__pdvalue {
+        font-size: 8rem;
+    }
+
+    &__maxvalue {
+        margin-left: 10rem;
+    }
+
+    &__contract-name {
+        margin-bottom: 0;
+    }
+
+    &__contract-timestamp {
+        margin-top: 0;
+    }
+
+    &__alert{
+        width: 50%;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+    }
+}

@@ -6,6 +6,8 @@ import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { LiveMarket } from "./pages/LiveMarket";
 import { DerivativeAnalysis } from "./pages/DerivativeAnalysis";
+import  SpotFutureSpread from "./pages/Derivatives/Futures/SpotFutureSpread";
+import  OIVolumeAnalysis from "./pages/Derivatives/Options/OIVolumeAnalysis";
 import { PairTrades } from "./pages/PairTrades";
 import { MarketBuzz } from "./pages/MarketBuzz";
 
@@ -33,6 +35,8 @@ export default function BasePage() {
 
         <ContentRoute path="/dashboard" component={DashboardPage} />
         <ContentRoute path="/livemarket" component={LiveMarket} />
+        <ContentRoute path="/derivative/futures/spotfutspread" component={SpotFutureSpread} />
+        <ContentRoute path="/derivative/options/oi-vol-analysis" component={OIVolumeAnalysis} />
         <ContentRoute path="/derivative" component={DerivativeAnalysis} />
         <ContentRoute path="/pairtrades" component={PairTrades} />
         <ContentRoute path="/marketbuzz" component={MarketBuzz} />

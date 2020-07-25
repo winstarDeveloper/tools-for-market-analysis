@@ -1,38 +1,35 @@
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React from "react";
-import {useLocation} from "react-router";
-import {NavLink}  from "react-router-dom";
+import { useLocation } from "react-router";
+import { NavLink } from "react-router-dom";
 import SVG from "react-inlinesvg";
-import {toAbsoluteUrl, checkIsActive} from "../../../../_helpers";
+import { toAbsoluteUrl, checkIsActive } from "../../../../_helpers";
 
 export function AsideMenuList({ layoutProps }) {
   const location = useLocation();
   const getMenuItemActive = (url, hasSubmenu = false) => {
     return checkIsActive(location, url)
-        ? ` ${!hasSubmenu && "menu-item-active"} menu-item-open `
-        : "";
+      ? ` ${!hasSubmenu && "menu-item-active"} menu-item-open `
+      : "";
   };
 
   return (
-      <>
-        {/* begin::Menu Nav */}
-        <ul className={`menu-nav ${layoutProps.ulClasses}`}>
-          
-          <li
-              className={`menu-item ${getMenuItemActive("/dashboard", false)}`}
-              aria-haspopup="true"
-          >
-            <NavLink className="menu-link" to="/dashboard">
+    <>
+      {/* begin::Menu Nav */}
+      <ul className={`menu-nav ${layoutProps.ulClasses}`}>
+        <li
+          className={`menu-item ${getMenuItemActive("/dashboard", false)}`}
+          aria-haspopup="true"
+        >
+          <NavLink className="menu-link" to="/dashboard">
             <span className="svg-icon menu-icon">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")}/>
+              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
             </span>
-              <span className="menu-text">Dashboard</span>
-            </NavLink>
-          </li>
-          
+            <span className="menu-text">Dashboard</span>
+          </NavLink>
+        </li>
 
-          
-          {/* <li
+        {/* <li
               className={`menu-item ${getMenuItemActive("/builder", false)}`}
               aria-haspopup="true"
           >
@@ -43,64 +40,226 @@ export function AsideMenuList({ layoutProps }) {
               <span className="menu-text">Layout Builder</span>
             </NavLink>
           </li> */}
-          
 
-          {/* Components */}
-          
-          <li className="menu-section ">
-            <h4 className="menu-text">Tools</h4>
-            <i className="menu-icon flaticon-more-v2"></i>
-          </li>
-          
-          <li
-              className={`menu-item ${getMenuItemActive("/livemarket", false)}`}
-              aria-haspopup="true"
-          >
-            <NavLink className="menu-link" to="/livemarket">
+        {/* Components */}
+
+        <li className="menu-section ">
+          <h4 className="menu-text">Tools</h4>
+          <i className="menu-icon flaticon-more-v2"></i>
+        </li>
+
+        <li
+          className={`menu-item ${getMenuItemActive("/livemarket", false)}`}
+          aria-haspopup="true"
+        >
+          <NavLink className="menu-link" to="/livemarket">
             <span className="svg-icon menu-icon">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Polygon.svg")}/>
+              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Polygon.svg")} />
             </span>
-              <span className="menu-text">Live Market</span>
-            </NavLink>
-          </li>
+            <span className="menu-text">Live Market</span>
+          </NavLink>
+        </li>
 
-          <li
-              className={`menu-item ${getMenuItemActive("/derivative", false)}`}
-              aria-haspopup="true"
-          >
-            <NavLink className="menu-link" to="/derivative">
+        <li
+          className={`menu-item menu-item-submenu ${getMenuItemActive(
+            "/derivative",
+            true
+          )}`}
+          aria-haspopup="true"
+          data-menu-toggle="hover"
+        >
+          <NavLink className="menu-link menu-toggle" to="/derivative/">
             <span className="svg-icon menu-icon">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Bezier-curve.svg")}/>
+              <SVG src={toAbsoluteUrl("/media/svg/icons/Shopping/Box2.svg")} />
             </span>
-              <span className="menu-text">Derivative Analysis</span>
-            </NavLink>
-          </li>
+            <span className="menu-text">Derivative Analysis</span>
+            <i className="menu-arrow" />
+          </NavLink>
+          <div className="menu-submenu ">
+            <i className="menu-arrow" />
+            <ul className="menu-subnav">
+              <li className="menu-item  menu-item-parent" aria-haspopup="true">
+                <span className="menu-link">
+                  <span className="menu-text">Derivative Analysis</span>
+                </span>
+              </li>
+              <ul className="menu-subnav">
+                {/*begin::2 Level*/}
+                <li
+                  className={`menu-item menu-item-submenu ${getMenuItemActive(
+                    "/derivative/futures"
+                  )}`}
+                  data-menu-toggle="hover"
+                  aria-haspopup="true"
+                >
+                  <NavLink
+                    className="menu-link menu-toggle"
+                    to="/derivative/futures"
+                  >
+                    <span className="menu-text">Futures</span>
+                    <i className="menu-arrow" />
+                  </NavLink>
+                  <div
+                    className={`menu-submenu menu-submenu-classic menu-submenu-right`}
+                  >
+                    <ul className="menu-subnav">
+                      {/*begin::3 Level*/}
+                      <li
+                        className={`menu-item ${getMenuItemActive(
+                          "/derivative/futures"
+                        )}`}
+                      >
+                        <NavLink
+                          className="menu-link"
+                          to="/derivative/futures/spotfutspread"
+                        >
+                          <i className="menu-bullet menu-bullet-dot">
+                            <span />
+                          </i>
+                          <span className="menu-text">
+                            Spot and Future Spread
+                          </span>
+                        </NavLink>
+                      </li>
+                      {/*end::3 Level*/}
+                    </ul>
+                  </div>
+                </li>
+                {/*end::2 Level*/}
 
-          <li
-              className={`menu-item ${getMenuItemActive("/pairtrades", false)}`}
-              aria-haspopup="true"
-          >
-            <NavLink className="menu-link" to="/pairtrades">
+                {/*begin::2 Level*/}
+                <li
+                  className={`menu-item menu-item-submenu ${getMenuItemActive(
+                    "/derivative/options"
+                  )}`}
+                  data-menu-toggle="hover"
+                  aria-haspopup="true"
+                >
+                  <NavLink
+                    className="menu-link menu-toggle"
+                    to="/derivative/options"
+                  >
+                    <span className="menu-text">Options</span>
+                    <i className="menu-arrow" />
+                  </NavLink>
+                  <div
+                    className={`menu-submenu menu-submenu-classic menu-submenu-right`}
+                  >
+                    <ul className="menu-subnav">
+                      {/*begin::3 Level*/}
+                      <li
+                        className={`menu-item ${getMenuItemActive(
+                          "/derivative/options/option-chain"
+                        )}`}
+                      >
+                        <NavLink
+                          className="menu-link"
+                          to="/derivative/options/option-chain"
+                        >
+                          <i className="menu-bullet menu-bullet-dot">
+                            <span />
+                          </i>
+                          <span className="menu-text">Option Chain</span>
+                        </NavLink>
+                      </li>
+                      {/*end::3 Level*/}
+
+                      {/*begin::3 Level*/}
+                      <li
+                        className={`menu-item ${getMenuItemActive(
+                          "/derivative/options/oi-vol-analysis"
+                        )}`}
+                      >
+                        <NavLink
+                          className="menu-link"
+                          to="/derivative/options/oi-vol-analysis"
+                        >
+                          <i className="menu-bullet menu-bullet-dot">
+                            <span />
+                          </i>
+                          <span className="menu-text">
+                            OI and Volume Analysis
+                          </span>
+                        </NavLink>
+                      </li>
+                      {/*end::3 Level*/}
+
+                      {/*begin::3 Level*/}
+                      <li
+                        className={`menu-item ${getMenuItemActive(
+                          "/derivative/options/option-chain-historical-data"
+                        )}`}
+                      >
+                        <NavLink
+                          className="menu-link"
+                          to="/derivative/options/option-chain-historical-data"
+                        >
+                          <i className="menu-bullet menu-bullet-dot">
+                            <span />
+                          </i>
+                          <span className="menu-text">
+                            Option Chain Historical Data
+                          </span>
+                        </NavLink>
+                      </li>
+                      {/*end::3 Level*/}
+
+                      {/*begin::3 Level*/}
+                      <li
+                        className={`menu-item ${getMenuItemActive(
+                          "/derivative/options/option-greeks-calculator"
+                        )}`}
+                      >
+                        <NavLink
+                          className="menu-link"
+                          to="/derivative/options/option-greeks-calculator"
+                        >
+                          <i className="menu-bullet menu-bullet-dot">
+                            <span />
+                          </i>
+                          <span className="menu-text">
+                            Option Greeks Calculator
+                          </span>
+                        </NavLink>
+                      </li>
+                      {/*end::3 Level*/}
+                    </ul>
+                  </div>
+                </li>
+                {/*end::2 Level*/}
+              </ul>
+            </ul>
+          </div>
+        
+        </li>
+
+        <li
+          className={`menu-item ${getMenuItemActive("/pairtrades", false)}`}
+          aria-haspopup="true"
+        >
+          <NavLink className="menu-link" to="/pairtrades">
             <span className="svg-icon menu-icon">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Picker.svg")}/>
+              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Picker.svg")} />
             </span>
-              <span className="menu-text">Pair Trades</span>
-            </NavLink>
-          </li>
+            <span className="menu-text">Pair Trades</span>
+          </NavLink>
+        </li>
 
-          <li
-              className={`menu-item ${getMenuItemActive("/marketbuzz", false)}`}
-              aria-haspopup="true"
-          >
-            <NavLink className="menu-link" to="/marketbuzz">
+        <li
+          className={`menu-item ${getMenuItemActive("/marketbuzz", false)}`}
+          aria-haspopup="true"
+        >
+          <NavLink className="menu-link" to="/marketbuzz">
             <span className="svg-icon menu-icon">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Target.svg")}/>
+              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Target.svg")} />
             </span>
-              <span className="menu-text">Market Buzz</span>
-            </NavLink>
-          </li>
+            <span className="menu-text">Market Buzz</span>
+          </NavLink>
+        </li>
 
-          {/*
+       
+
+        {/*
           <li
               className={`menu-item menu-item-submenu ${getMenuItemActive(
                   "/google-material", true
@@ -1541,9 +1700,9 @@ export function AsideMenuList({ layoutProps }) {
           </li>
           
           */}
-        </ul>
+      </ul>
 
-        {/* end::Menu Nav */}
-      </>
+      {/* end::Menu Nav */}
+    </>
   );
 }
