@@ -25,7 +25,7 @@ class OIVolumeAnalysis extends Component {
       otm_put: [],
       tablesSet: false,
       timestamp: "",
-      sortBy: 'Open-Interest'
+      sortBy: "Open-Interest",
     };
     this.getSymbols = this.getSymbols.bind(this);
     this.getIndicesData = this.getIndicesData.bind(this);
@@ -136,7 +136,10 @@ class OIVolumeAnalysis extends Component {
 
   async componentDidMount() {
     this.getSymbols();
-    this.interval = setInterval(() => this.updateData(this.state.contractName), 5000);
+    this.interval = setInterval(
+      () => this.updateData(this.state.contractName),
+      5000
+    );
   }
 
   async handleChangeContract(value) {
@@ -172,7 +175,7 @@ class OIVolumeAnalysis extends Component {
         expiryDisabled: true,
         expiryDates: [],
         defaultExpiry: "",
-        sortBy: 'Open-Interest'
+        sortBy: "Open-Interest",
       });
     }
   }
@@ -275,21 +278,21 @@ class OIVolumeAnalysis extends Component {
 
     this.setState({ tablesSet: true });
     return true;
-  };
-
-  handleChangeSort = (value) => {
-    this.setState({ sortBy: value.label});
-    this.setTables();
-    this.forceUpdate();
   }
 
-  sortBy = (a,b) => {
-    if(this.state.sortBy === 'Volume'){
-      return this.sortByVolume(a,b);
-    }else{
-      return this.sortByOI(a,b);
+  handleChangeSort = (value) => {
+    this.setState({ sortBy: value.label });
+    this.setTables();
+    this.forceUpdate();
+  };
+
+  sortBy = (a, b) => {
+    if (this.state.sortBy === "Volume") {
+      return this.sortByVolume(a, b);
+    } else {
+      return this.sortByOI(a, b);
     }
-  } 
+  };
 
   sortByOI = (a, b) => {
     let comparison = 0;
@@ -419,12 +422,6 @@ class OIVolumeAnalysis extends Component {
   render() {
     return !this.state.loading ? (
       <div className="oivolume">
-        {this.state.message !== "" ? (
-          <Alert variant="danger" className="row spotfuturespread__alert">
-            {this.state.message + " - Check connection and reload the page"}
-          </Alert>
-        ) : null}
-
         <div className="row d-flex justify-content-center">
           <div className="oivolume__form-contract">
             <Form.Group>
@@ -480,7 +477,7 @@ class OIVolumeAnalysis extends Component {
               />
             </Form.Group>
           </div>
-        
+
           <div className="oivolume__form-sort">
             <Form.Group>
               <Form.Label>Sort by:</Form.Label>
@@ -495,8 +492,8 @@ class OIVolumeAnalysis extends Component {
                   },
                   placeholder: "Select Sort",
                 }}
-                options={[{label: 'Open-Interest'},  {label: 'Volume'}]}
-                defaultValue={{label: 'Open-Interest'}}
+                options={[{ label: "Open-Interest" }, { label: "Volume" }]}
+                defaultValue={{ label: "Open-Interest" }}
                 onChange={this.handleChangeSort}
                 isDisabled={this.state.expiryDisabled}
               />
@@ -510,7 +507,7 @@ class OIVolumeAnalysis extends Component {
               <p className="display-4 oivolume__contract-name">
                 {this.state.contractName + "\t\t" + this.state.defaultExpiry}
               </p>
-            </div>  
+            </div>
             <div className="row d-flex justify-content-center">
               <p className="text-muted oivolume__contract-timestamp">
                 Last Updated - {this.state.timestamp}
@@ -520,7 +517,7 @@ class OIVolumeAnalysis extends Component {
               <div className="row oivolume__row">
                 <Grid container spacing={1}>
                   <Grid item xs={3}>
-                  <p className="oivolume__calls-itm">ITM</p>
+                    <p className="oivolume__calls-itm">ITM</p>
                   </Grid>
                   <Grid item xs={3}>
                     <p className="oivolume__calls-title">Calls</p>
@@ -567,14 +564,14 @@ class OIVolumeAnalysis extends Component {
                     </Table>
                   </Grid>
                   <Grid item xs={3}>
-                  <p className="oivolume__puts-otm">OTM</p>
+                    <p className="oivolume__puts-otm">OTM</p>
                   </Grid>
                 </Grid>
               </div>
               <div className="row oivolume__row">
                 <Grid container spacing={1}>
                   <Grid item xs={3}>
-                  <p className="oivolume__calls-otm">OTM</p>
+                    <p className="oivolume__calls-otm">OTM</p>
                   </Grid>
                   <Grid item xs={3}>
                     <Table variant="light" striped bordered hover>
@@ -607,7 +604,7 @@ class OIVolumeAnalysis extends Component {
                     </Table>
                   </Grid>
                   <Grid item xs={3}>
-                  <p className="oivolume__puts-itm">ITM</p>
+                    <p className="oivolume__puts-itm">ITM</p>
                   </Grid>
                 </Grid>
               </div>
@@ -618,7 +615,14 @@ class OIVolumeAnalysis extends Component {
         )}
       </div>
     ) : (
-      <BoxLoading />
+      <>
+        {this.state.message !== "" ? (
+          <Alert variant="danger" className="row spotfuturespread__alert">
+            {this.state.message + " - Check connection and reload the page"}
+          </Alert>
+        ) : null}
+        <BoxLoading />
+      </>
     );
   }
 }
