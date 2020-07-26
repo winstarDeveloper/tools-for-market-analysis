@@ -138,8 +138,12 @@ class OIVolumeAnalysis extends Component {
     this.getSymbols();
     this.interval = setInterval(
       () => this.updateData(this.state.contractName),
-      5000
+      30000
     );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   async handleChangeContract(value) {

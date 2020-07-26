@@ -1,0 +1,45 @@
+.dashboard {
+    &__index-title {
+        margin: auto;
+        margin-left: 1rem;
+    }
+
+    &__index-value{
+        margin: auto;
+        margin-right: 1rem;
+    }
+
+    &__index-data{
+        margin: auto;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    &__index-ohlc{
+        margin: auto;
+        margin-top: 1rem;
+    }
+
+    &__index-ohlc-title{
+        margin: auto;
+        margin-bottom: 0;
+    }
+
+    &__commodity-title{
+        margin: auto;
+        margin-left: 1rem;
+    }
+
+    &__commodity-value{
+        margin: auto;
+        margin-right: 1rem;
+    }
+
+    &__commodity-subtext{
+        margin: auto;
+        margin-left: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+}

@@ -32,14 +32,48 @@ export function HeaderMenu({ layoutProps }) {
         </li>
 
         <li
-          className={`menu-item menu-item-rel ${getMenuItemActive(
+          data-menu-toggle={layoutProps.menuDesktopToggle}
+          aria-haspopup="true"
+          className={`menu-item menu-item-submenu menu-item-rel ${getMenuItemActive(
             "/livemarket"
           )}`}
         >
-          <NavLink className="menu-link" to="/livemarket">
+          <NavLink className="menu-link menu-toggle" to="/livemarket">
             <span className="menu-text">Live Market</span>
             {layoutProps.rootArrowEnabled && <i className="menu-arrow" />}
           </NavLink>
+          <div className="menu-submenu menu-submenu-classic menu-submenu-left">
+            <ul className="menu-subnav">
+              <li
+                className={`menu-item ${getMenuItemActive(
+                  "/livemarket/viewallindices"
+                )}`}
+              >
+                <NavLink className="menu-link" to="/livemarket/viewallindices">
+                  <i className="menu-bullet menu-bullet-dot">
+                    <span />
+                  </i>
+                  <span className="menu-text">View All Indices</span>
+                </NavLink>
+              </li>
+
+              <li
+                className={`menu-item ${getMenuItemActive(
+                  "/livemarket/viewallcommodity"
+                )}`}
+              >
+                <NavLink
+                  className="menu-link"
+                  to="/livemarket/viewallcommodity"
+                >
+                  <i className="menu-bullet menu-bullet-dot">
+                    <span />
+                  </i>
+                  <span className="menu-text">View All Commodities</span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
         </li>
 
         <li
@@ -51,7 +85,7 @@ export function HeaderMenu({ layoutProps }) {
         >
           <NavLink className="menu-link menu-toggle" to="/derivative">
             <span className="menu-text">Derivative Analysis</span>
-            <i className="menu-arrow"></i>
+            {layoutProps.rootArrowEnabled && <i className="menu-arrow" />}
           </NavLink>
           <div className="menu-submenu menu-submenu-classic menu-submenu-left">
             <ul className="menu-subnav">
@@ -63,7 +97,10 @@ export function HeaderMenu({ layoutProps }) {
                 data-menu-toggle="hover"
                 aria-haspopup="true"
               >
-                <NavLink className="menu-link menu-toggle" to="/derivative/futures">
+                <NavLink
+                  className="menu-link menu-toggle"
+                  to="/derivative/futures"
+                >
                   <span className="menu-text">Futures</span>
                   <i className="menu-arrow" />
                 </NavLink>
@@ -77,11 +114,16 @@ export function HeaderMenu({ layoutProps }) {
                         "/derivative/futures"
                       )}`}
                     >
-                      <NavLink className="menu-link" to="/derivative/futures/spotfutspread">
+                      <NavLink
+                        className="menu-link"
+                        to="/derivative/futures/spotfutspread"
+                      >
                         <i className="menu-bullet menu-bullet-dot">
                           <span />
                         </i>
-                        <span className="menu-text">Spot and Future Spread</span>
+                        <span className="menu-text">
+                          Spot and Future Spread
+                        </span>
                       </NavLink>
                     </li>
                     {/*end::3 Level*/}
@@ -98,7 +140,10 @@ export function HeaderMenu({ layoutProps }) {
                 data-menu-toggle="hover"
                 aria-haspopup="true"
               >
-                <NavLink className="menu-link menu-toggle" to="/derivative/options">
+                <NavLink
+                  className="menu-link menu-toggle"
+                  to="/derivative/options"
+                >
                   <span className="menu-text">Options</span>
                   <i className="menu-arrow" />
                 </NavLink>
@@ -112,7 +157,10 @@ export function HeaderMenu({ layoutProps }) {
                         "/derivative/options/option-chain"
                       )}`}
                     >
-                      <NavLink className="menu-link" to="/derivative/options/option-chain">
+                      <NavLink
+                        className="menu-link"
+                        to="/derivative/options/option-chain"
+                      >
                         <i className="menu-bullet menu-bullet-dot">
                           <span />
                         </i>
@@ -127,11 +175,16 @@ export function HeaderMenu({ layoutProps }) {
                         "/derivative/options/oi-vol-analysis"
                       )}`}
                     >
-                      <NavLink className="menu-link" to="/derivative/options/oi-vol-analysis">
+                      <NavLink
+                        className="menu-link"
+                        to="/derivative/options/oi-vol-analysis"
+                      >
                         <i className="menu-bullet menu-bullet-dot">
                           <span />
                         </i>
-                        <span className="menu-text">OI and Volume Analysis</span>
+                        <span className="menu-text">
+                          OI and Volume Analysis
+                        </span>
                       </NavLink>
                     </li>
                     {/*end::3 Level*/}
@@ -142,11 +195,16 @@ export function HeaderMenu({ layoutProps }) {
                         "/derivative/options/option-chain-historical-data"
                       )}`}
                     >
-                      <NavLink className="menu-link" to="/derivative/options/option-chain-historical-data">
+                      <NavLink
+                        className="menu-link"
+                        to="/derivative/options/option-chain-historical-data"
+                      >
                         <i className="menu-bullet menu-bullet-dot">
                           <span />
                         </i>
-                        <span className="menu-text">Option Chain Historical Data</span>
+                        <span className="menu-text">
+                          Option Chain Historical Data
+                        </span>
                       </NavLink>
                     </li>
                     {/*end::3 Level*/}
@@ -157,21 +215,24 @@ export function HeaderMenu({ layoutProps }) {
                         "/derivative/options/option-greeks-calculator"
                       )}`}
                     >
-                      <NavLink className="menu-link" to="/derivative/options/option-greeks-calculator">
+                      <NavLink
+                        className="menu-link"
+                        to="/derivative/options/option-greeks-calculator"
+                      >
                         <i className="menu-bullet menu-bullet-dot">
                           <span />
                         </i>
-                        <span className="menu-text">Option Greeks Calculator</span>
+                        <span className="menu-text">
+                          Option Greeks Calculator
+                        </span>
                       </NavLink>
                     </li>
                     {/*end::3 Level*/}
-
                   </ul>
                 </div>
               </li>
               {/*end::2 Level*/}
             </ul>
-          
           </div>
         </li>
         {/*end::1 Level*/}

@@ -49,15 +49,49 @@ export function AsideMenuList({ layoutProps }) {
         </li>
 
         <li
-          className={`menu-item ${getMenuItemActive("/livemarket", false)}`}
-          aria-haspopup="true"
+          className={`menu-item ${getMenuItemActive(
+            "/livemarket"
+          )}`} aria-haspopup="true"
         >
-          <NavLink className="menu-link" to="/livemarket">
+          <NavLink className="menu-link menu-toggle" to="/livemarket">
             <span className="svg-icon menu-icon">
               <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Polygon.svg")} />
             </span>
             <span className="menu-text">Live Market</span>
+            <i className="menu-arrow" />
           </NavLink>
+          <div className="menu-submenu menu-submenu-classic menu-submenu-left">
+            <ul className="menu-subnav">
+              <li
+                className={`menu-item ${getMenuItemActive(
+                  "/livemarket/viewallindices"
+                )}`}
+              >
+                <NavLink className="menu-link" to="/livemarket/viewallindices">
+                  <i className="menu-bullet menu-bullet-dot">
+                    <span />
+                  </i>
+                  <span className="menu-text">View All Indices</span>
+                </NavLink>
+              </li>
+
+              <li
+                className={`menu-item ${getMenuItemActive(
+                  "/livemarket/viewallcommodity"
+                )}`}
+              >
+                <NavLink
+                  className="menu-link"
+                  to="/livemarket/viewallcommodity"
+                >
+                  <i className="menu-bullet menu-bullet-dot">
+                    <span />
+                  </i>
+                  <span className="menu-text">View All Commodities</span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
         </li>
 
         <li

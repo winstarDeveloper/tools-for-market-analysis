@@ -140,3 +140,47 @@ body {
   float: left;
   margin-top: 28%;
   margin-left: 1rem; }
+
+.dashboard__index-title {
+  margin: auto;
+  margin-left: 1rem; }
+
+.dashboard__index-value {
+  margin: auto;
+  margin-right: 1rem; }
+
+.dashboard__index-data {
+  margin: auto;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem; }
+
+.dashboard__index-ohlc {
+  margin: auto;
+  margin-top: 1rem; }
+
+.dashboard__index-ohlc-title {
+  margin: auto;
+  margin-bottom: 0; }
+
+.dashboard__commodity-title {
+  margin: auto;
+  margin-left: 1rem; }
+
+.dashboard__commodity-value {
+  margin: auto;
+  margin-right: 1rem; }
+
+.dashboard__commodity-subtext {
+  margin: auto;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem; }
+
+.viewallindices {
+  display: flex;
+  flex-wrap: wrap; }
+
+.viewallcommodities {
+  display: flex;
+  flex-wrap: wrap; }

@@ -2,7 +2,7 @@ import React, {useMemo} from "react";
 import objectPath from "object-path";
 import {useHtmlClassService} from "../../layout";
 
-import { MainDashboard } from "./MainDashboard";
+import MainDashboard from "./MainDashboard";
 
 // import {Demo1Dashboard} from "./Demo1Dashboard";
 // import {Demo2Dashboard} from "./Demo2Dashboard";

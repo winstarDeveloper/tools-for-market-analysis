@@ -5,6 +5,8 @@ import { BuilderPage } from "./pages/BuilderPage";
 import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { LiveMarket } from "./pages/LiveMarket";
+import ViewAllIndices from "./pages/LiveMarket/ViewAllIndices";
+import ViewAllCommodities from "./pages/LiveMarket/ViewAllCommodities";
 import { DerivativeAnalysis } from "./pages/DerivativeAnalysis";
 import  SpotFutureSpread from "./pages/Derivatives/Futures/SpotFutureSpread";
 import  OIVolumeAnalysis from "./pages/Derivatives/Options/OIVolumeAnalysis";
@@ -34,6 +36,8 @@ export default function BasePage() {
         <Redirect exact from="/" to="/dashboard" />
 
         <ContentRoute path="/dashboard" component={DashboardPage} />
+        <ContentRoute path="/livemarket/viewallindices" component={ViewAllIndices} />
+        <ContentRoute path="/livemarket/viewallcommodity" component={ViewAllCommodities} />
         <ContentRoute path="/livemarket" component={LiveMarket} />
         <ContentRoute path="/derivative/futures/spotfutspread" component={SpotFutureSpread} />
         <ContentRoute path="/derivative/options/oi-vol-analysis" component={OIVolumeAnalysis} />

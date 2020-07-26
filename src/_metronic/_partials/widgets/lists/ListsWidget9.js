@@ -45,6 +45,7 @@ export function ListsWidget9({ className }) {
                 Outlines keep you honest. And keep structure
               </div>
             </div>
+            
             <div className="timeline-item align-items-start">
               <div className="timeline-label font-weight-bolder text-dark-75 font-size-lg">
                 10:00
