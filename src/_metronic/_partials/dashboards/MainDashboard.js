@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BoxLoading } from "react-loadingg";
 import { Alert } from "react-bootstrap";
 
-import * as NseURL from "./../../../app/utils/NSE_Urls";
+import * as NseURL from "../../../app/utils/NSE_Urls";
 class MainDashboard extends Component {
   constructor(props) {
     super(props);
