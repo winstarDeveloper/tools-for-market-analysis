@@ -146,7 +146,7 @@ class MainDashboard extends Component {
     this.getCommodity();
     this.getGainersLoosers();
     this.setState({ loading: false });
-    this.interval = setInterval(() => this.updateData(), 30000);
+    this.interval = setInterval(() => this.updateData(), 25000);
   }
 
   componentWillUnmount() {
@@ -174,6 +174,12 @@ class MainDashboard extends Component {
               <div className="card-body pt-4">
                 <div className="mt-3">
                   <table className="table table-borderless m-0 p-0">
+                    <thead>
+                      <tr className="text-left text-uppercase">
+                        <th style={{ minWidth: "140px" }}></th>
+                        <th style={{ minWidth: "220px" }}></th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {this.state.marketStatus.map((i, index) => {
                         return (
@@ -182,8 +188,8 @@ class MainDashboard extends Component {
                             className="font-weight-bolder text-dark-75 pl-3 font-size-lg ml-0 mb-0"
                           >
                             <td className="text-left">{i.market + " : "}</td>
-                            <td className="text-right">
-                              {i.marketStatus === "Open" ? (
+                            <td className="text-left">
+                              {i.marketStatus !== "Close" ? (
                                 <p className="text-success m-0">
                                   {i.marketStatusMessage}
                                 </p>

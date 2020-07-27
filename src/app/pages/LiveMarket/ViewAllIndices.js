@@ -48,7 +48,7 @@ class ViewAllIndices extends Component {
   componentDidMount() {
     this.getAllIndices();
     this.setState({ loading: false });
-    this.interval = setInterval(() => this.updateData(), 30000);
+    this.interval = setInterval(() => this.updateData(), 25000);
   }
 
   componentWillUnmount() {

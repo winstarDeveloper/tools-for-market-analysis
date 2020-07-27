@@ -41,20 +41,20 @@ class ViewAllCommodities extends Component {
     }
   }
 
-  updateData = () => {
-    this.getCommodity();
-    this.setState({ loading: false });
-  };
+  // updateData = () => {
+  //   this.getCommodity();
+  //   this.setState({ loading: false });
+  // };
 
   componentDidMount() {
     this.getCommodity();
     this.setState({ loading: false });
-    this.interval = setInterval(() => this.updateData(), 30000);
+    // this.interval = setInterval(() => this.updateData(), 25000);
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
 
   render() {
     return (

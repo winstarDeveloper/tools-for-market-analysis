@@ -22,9 +22,11 @@ class SpotFutureSpread extends Component {
         max: -1000,
         p_d: "--",
       },
+      searchValue: {},
     };
     this.getData = this.getData.bind(this);
     this.handleChangeSearch = this.handleChangeSearch.bind(this);
+    this.updateData = this.updateData.bind(this);
   }
 
   async handleChangeSearch(value) {
@@ -41,7 +43,7 @@ class SpotFutureSpread extends Component {
         },
       });
     } else {
-      this.setState({ searchFor: value.label });
+      this.setState({ searchFor: value.label, searchValue: value });
       let _p_d = value.lastPrice - value.underlyingValue;
       _p_d = +_p_d.toFixed(2);
       this.setState({
@@ -77,7 +79,6 @@ class SpotFutureSpread extends Component {
 
       const Data = D2.data.concat(D3.data, D1.data);
 
-      console.log(Data);
       if (Data) {
         this.setState({
           loading: false,
@@ -99,9 +100,34 @@ class SpotFutureSpread extends Component {
     }
   }
 
-  updateData() {
+  async updateData() {
     // if (!this.state.loading) {
-    this.getData();
+    await this.getData();
+
+    if (this.state.searchFor !== "") {
+      const ut = this.state.data
+        .filter((i) => i.contract === this.state.searchFor)
+        .map((i) => {
+          return {
+            label: i.contract,
+            lastPrice: i.lastPrice,
+            underlyingValue: i.underlyingValue,
+          };
+        });
+        console.log('ut: ', ut[0]);
+      let _p_d = ut[0].lastPrice - ut[0].underlyingValue;
+      _p_d = +_p_d.toFixed(2);
+      await this.setState({
+        priceData: {
+          name: ut[0].label,
+          spot: ut[0].underlyingValue,
+          future: ut[0].lastPrice,
+          min: this.state.priceData.min < _p_d ? this.state.priceData.min : _p_d,
+          max: this.state.priceData.max > _p_d ? this.state.priceData.max : _p_d,
+          p_d: _p_d,
+        },
+      });
+    }
     // }
   }
 
@@ -111,7 +137,7 @@ class SpotFutureSpread extends Component {
 
   async componentDidMount() {
     this.getData();
-    this.interval = setInterval(() => this.updateData(), 30000);
+    this.interval = setInterval(() => this.updateData(), 25000);
   }
 
   render() {
@@ -205,7 +231,7 @@ class SpotFutureSpread extends Component {
 
         <div className="row d-flex justify-content-center">
           <div className="spotfuturespread__premium-discount">
-            <Card border="info" style={{ width: "30rem" }}>
+            <Card border="info" style={{ width: "35rem" }}>
               <Card.Body>
                 <Card.Text className="text-center spotfuturespread__pdvalue">
                   {this.state.priceData.p_d.toLocaleString("hi-IN")}

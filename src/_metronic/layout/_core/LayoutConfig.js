@@ -124,7 +124,7 @@ export function getInitLayoutConfig() {
     aside: {
       self: {
         theme: "light", // light/dark
-        display: true,
+        display: false,
         fixed: true,
         minimize: {
           toggle: true, // allow toggle

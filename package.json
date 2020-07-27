@@ -96,5 +96,8 @@
         "webpack-cli": "3.3.11",
         "webpack-messages": "2.0.4",
         "webpack-rtl-plugin": "2.0.0"
+    },
+    "engines": {
+      "node": ">=10.0.0"
     }
 }
