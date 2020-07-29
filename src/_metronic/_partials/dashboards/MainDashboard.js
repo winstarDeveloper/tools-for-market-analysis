@@ -189,7 +189,7 @@ class MainDashboard extends Component {
                           >
                             <td className="text-left">{i.market + " : "}</td>
                             <td className="text-left">
-                              {i.marketStatus !== "Close" ? (
+                              {i.marketStatus !== "Closed" ? (
                                 <p className="text-success m-0">
                                   {i.marketStatusMessage}
                                 </p>
