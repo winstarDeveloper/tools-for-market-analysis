@@ -1,0 +1,83 @@
+.optiongreeks {
+
+    &__select-contract {
+        width: 25rem;
+    }
+
+    &__spot-price {
+        width: 25rem;
+        margin: 0 1rem;
+    }
+
+    &__spot-price-field {
+        background-color: #ffffff;
+    }
+
+    &__strike-price {
+        width: 25rem;
+        margin: 0 1rem;
+    }
+
+    &__strike-price-field {
+        background-color: #ffffff;
+    }
+
+    &__expiry {
+        width: 25rem;
+        margin: 0 1rem;
+    }
+
+    &__expiry-field {
+        background-color: #ffffff;
+    }
+
+    &__volatility {
+        width: 25rem;
+        margin: 0 1rem;
+    }
+
+    &__volatility-field {
+        background-color: #ffffff;
+    }
+
+    &__interest {
+        width: 25rem;
+        margin: 0 1rem;
+    }
+
+    &__interest-field {
+        background-color: #ffffff;
+    }
+
+    &__dividend {
+        width: 25rem;
+        margin: 0 1rem;
+    }
+
+    &__dividend-field {
+        background-color: #ffffff;
+    }
+
+    &__calculate {
+        width:20rem;
+        margin: 1rem;
+    }
+
+    &__calculate:hover {
+        transform: scale(1.05);
+    }
+
+    &__calculate:active {
+        transform: translateY(1px);
+    }
+
+    &__table {
+        width: 60%;
+        margin-top: 2rem;
+        background-color: #ffffff;
+    }
+
+    &__option-type{
+        margin: 1rem;
+    }
+}

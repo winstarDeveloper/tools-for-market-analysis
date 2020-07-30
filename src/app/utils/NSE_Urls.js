@@ -11,3 +11,5 @@ export const AllIndicesURL = "allIndices";
 export const CommoditySpotRatesURL = "refrates?index=commodityspotrates";
 export const GainersURL = "live-analysis-variations?index=gainers";
 export const LoosersURL = "live-analysis-variations?index=loosers";
+export const IndicesListURL = "equity-master";
+export const IndexDataURL = "equity-stockIndices?index=";

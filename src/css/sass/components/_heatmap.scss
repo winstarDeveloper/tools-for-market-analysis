@@ -1,0 +1,36 @@
+.heatmap {
+    &__select-index {
+        width: 25rem;
+        margin:1rem;
+    }
+    
+    &__sort-by {
+        width: 25rem;
+        margin: 1rem;
+    }
+
+    &__index {
+        padding: 0;
+    }
+
+    &__index-title {
+        margin: auto;
+        margin-left: 1rem;
+    }
+
+    &__index-value {
+        margin: auto;
+        margin-right: 1rem;
+    }
+
+    &__index-percent {
+        font-size: 6rem;
+        margin: 0.1rem;
+        padding: 0;
+    }
+
+    &__max-min {
+        height: 2.6rem;
+        margin: auto 0 auto 0;
+    }
+}

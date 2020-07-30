@@ -7,9 +7,11 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { LiveMarket } from "./pages/LiveMarket";
 import ViewAllIndices from "./pages/LiveMarket/ViewAllIndices";
 import ViewAllCommodities from "./pages/LiveMarket/ViewAllCommodities";
+import HeatMap from "./pages/LiveMarket/HeatMap";
 import { DerivativeAnalysis } from "./pages/DerivativeAnalysis";
 import  SpotFutureSpread from "./pages/Derivatives/Futures/SpotFutureSpread";
 import  OIVolumeAnalysis from "./pages/Derivatives/Options/OIVolumeAnalysis";
+import OptionGreeksCalculator from "./pages/Derivatives/Options/OptionGreeksCalculator";
 import { PairTrades } from "./pages/PairTrades";
 import { MarketBuzz } from "./pages/MarketBuzz";
 
@@ -38,9 +40,11 @@ export default function BasePage() {
         <ContentRoute path="/dashboard" component={DashboardPage} />
         <ContentRoute path="/livemarket/viewallindices" component={ViewAllIndices} />
         <ContentRoute path="/livemarket/viewallcommodity" component={ViewAllCommodities} />
+        <ContentRoute path="/livemarket/heatmap" component={HeatMap} />
         <ContentRoute path="/livemarket" component={LiveMarket} />
         <ContentRoute path="/derivative/futures/spotfutspread" component={SpotFutureSpread} />
         <ContentRoute path="/derivative/options/oi-vol-analysis" component={OIVolumeAnalysis} />
+        <ContentRoute path="/derivative/options/option-greeks-calculator" component={OptionGreeksCalculator} />
         <ContentRoute path="/derivative" component={DerivativeAnalysis} />
         <ContentRoute path="/pairtrades" component={PairTrades} />
         <ContentRoute path="/marketbuzz" component={MarketBuzz} />

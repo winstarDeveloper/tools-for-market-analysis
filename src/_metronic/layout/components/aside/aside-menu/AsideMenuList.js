@@ -90,6 +90,22 @@ export function AsideMenuList({ layoutProps }) {
                   <span className="menu-text">View All Commodities</span>
                 </NavLink>
               </li>
+
+              <li
+                className={`menu-item ${getMenuItemActive(
+                  "/livemarket/heatmap"
+                )}`}
+              >
+                <NavLink
+                  className="menu-link"
+                  to="/livemarket/heatmap"
+                >
+                  <i className="menu-bullet menu-bullet-dot">
+                    <span />
+                  </i>
+                  <span className="menu-text">HeatMap</span>
+                </NavLink>
+              </li>
             </ul>
           </div>
         </li>

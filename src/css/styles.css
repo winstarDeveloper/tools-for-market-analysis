@@ -184,3 +184,94 @@ body {
 .viewallcommodities {
   display: flex;
   flex-wrap: wrap; }
+
+.heatmap__select-index {
+  width: 25rem;
+  margin: 1rem; }
+
+.heatmap__sort-by {
+  width: 25rem;
+  margin: 1rem; }
+
+.heatmap__index {
+  padding: 0; }
+
+.heatmap__index-title {
+  margin: auto;
+  margin-left: 1rem; }
+
+.heatmap__index-value {
+  margin: auto;
+  margin-right: 1rem; }
+
+.heatmap__index-percent {
+  font-size: 6rem;
+  margin: 0.1rem;
+  padding: 0; }
+
+.heatmap__max-min {
+  height: 2.6rem;
+  margin: auto 0 auto 0; }
+
+.optiongreeks__select-contract {
+  width: 25rem; }
+
+.optiongreeks__spot-price {
+  width: 25rem;
+  margin: 0 1rem; }
+
+.optiongreeks__spot-price-field {
+  background-color: #ffffff; }
+
+.optiongreeks__strike-price {
+  width: 25rem;
+  margin: 0 1rem; }
+
+.optiongreeks__strike-price-field {
+  background-color: #ffffff; }
+
+.optiongreeks__expiry {
+  width: 25rem;
+  margin: 0 1rem; }
+
+.optiongreeks__expiry-field {
+  background-color: #ffffff; }
+
+.optiongreeks__volatility {
+  width: 25rem;
+  margin: 0 1rem; }
+
+.optiongreeks__volatility-field {
+  background-color: #ffffff; }
+
+.optiongreeks__interest {
+  width: 25rem;
+  margin: 0 1rem; }
+
+.optiongreeks__interest-field {
+  background-color: #ffffff; }
+
+.optiongreeks__dividend {
+  width: 25rem;
+  margin: 0 1rem; }
+
+.optiongreeks__dividend-field {
+  background-color: #ffffff; }
+
+.optiongreeks__calculate {
+  width: 20rem;
+  margin: 1rem; }
+
+.optiongreeks__calculate:hover {
+  transform: scale(1.05); }
+
+.optiongreeks__calculate:active {
+  transform: translateY(1px); }
+
+.optiongreeks__table {
+  width: 60%;
+  margin-top: 2rem;
+  background-color: #ffffff; }
+
+.optiongreeks__option-type {
+  margin: 1rem; }
