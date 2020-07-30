@@ -8,6 +8,7 @@ import { LiveMarket } from "./pages/LiveMarket";
 import ViewAllIndices from "./pages/LiveMarket/ViewAllIndices";
 import ViewAllCommodities from "./pages/LiveMarket/ViewAllCommodities";
 import HeatMap from "./pages/LiveMarket/HeatMap";
+import NiftyWeightage from "./pages/LiveMarket/NiftyWeightage";
 import { DerivativeAnalysis } from "./pages/DerivativeAnalysis";
 import  SpotFutureSpread from "./pages/Derivatives/Futures/SpotFutureSpread";
 import  OIVolumeAnalysis from "./pages/Derivatives/Options/OIVolumeAnalysis";
@@ -41,6 +42,7 @@ export default function BasePage() {
         <ContentRoute path="/livemarket/viewallindices" component={ViewAllIndices} />
         <ContentRoute path="/livemarket/viewallcommodity" component={ViewAllCommodities} />
         <ContentRoute path="/livemarket/heatmap" component={HeatMap} />
+        <ContentRoute path="/livemarket/niftyweightage" component={NiftyWeightage} />
         <ContentRoute path="/livemarket" component={LiveMarket} />
         <ContentRoute path="/derivative/futures/spotfutspread" component={SpotFutureSpread} />
         <ContentRoute path="/derivative/options/oi-vol-analysis" component={OIVolumeAnalysis} />

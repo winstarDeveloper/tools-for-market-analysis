@@ -88,6 +88,22 @@ export function HeaderMenu({ layoutProps }) {
                   <span className="menu-text">HeatMap</span>
                 </NavLink>
               </li>
+
+              <li
+                className={`menu-item ${getMenuItemActive(
+                  "/livemarket/niftyweightage"
+                )}`}
+              >
+                <NavLink
+                  className="menu-link"
+                  to="/livemarket/niftyweightage"
+                >
+                  <i className="menu-bullet menu-bullet-dot">
+                    <span />
+                  </i>
+                  <span className="menu-text">NIFTY Weightage</span>
+                </NavLink>
+              </li>
             </ul>
           </div>
         </li>

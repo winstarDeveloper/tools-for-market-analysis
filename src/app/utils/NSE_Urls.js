@@ -13,3 +13,4 @@ export const GainersURL = "live-analysis-variations?index=gainers";
 export const LoosersURL = "live-analysis-variations?index=loosers";
 export const IndicesListURL = "equity-master";
 export const IndexDataURL = "equity-stockIndices?index=";
+export const QuoteInfoURL = "quote-equity?section=trade_info&symbol=";
