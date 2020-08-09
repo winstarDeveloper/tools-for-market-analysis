@@ -62,13 +62,13 @@ class ViewAllCommodities extends Component {
         {!this.state.loading ? (
           this.state.allCommodity.map((j) => {
             return (
-              <div className="col-lg-6 col-xxl-3" key={j.symbol}>
+              <div className="col-lg-3 col-xxl-3" key={j.symbol}>
                 <div className="col bg-light-warning px-6 py-8 rounded-xl mr-7 mb-7 shadow">
                   <div className="row">
-                    <p className="text-warning font-weight-bolder display-4 dashboard__commodity-title">
+                    <p className="text-warning font-weight-bolder h1 dashboard__commodity-title">
                       {j.symbol}
                     </p>
-                    <p className="text-secondary font-weight-bold display-4 dashboard__commodity-value">
+                    <p className="text-secondary font-weight-bold h1 dashboard__commodity-value">
                       {(j.spotPrice * 1).toLocaleString("hi-IN")} (
                       {(j.spotPrice * 1 - j.lastSpotPrice * 1).toLocaleString(
                         "hi-IN"

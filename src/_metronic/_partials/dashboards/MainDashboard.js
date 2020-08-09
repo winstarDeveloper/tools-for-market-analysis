@@ -165,19 +165,19 @@ class MainDashboard extends Component {
     return !this.state.loading ? (
       <div className="card-stretch gutter-b">
         <div className="row">
-          <div className="col-lg-6 col-xxl-3">
+          <div className="col-lg-3 col-xxl-3">     
             <div className="col bg-light-primary px-6 py-8 rounded-xl mb-7 shadow">
               <p className="font-weight-bolder font-size-h4 mt-2 text-primary mb-0">
                 Market Status:
               </p>
 
-              <div className="card-body pt-4">
-                <div className="mt-3">
-                  <table className="table table-borderless m-0 p-0">
+              <div className="card-body p-0">
+                <div className="mx-auto text-center">
+                  <table className="table table-borderless">
                     <thead>
                       <tr className="text-left text-uppercase">
-                        <th style={{ minWidth: "140px" }}></th>
-                        <th style={{ minWidth: "220px" }}></th>
+                        <th style={{ minWidth: "auto" }}></th>
+                        <th style={{ minWidth: "auto" }}></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -189,12 +189,12 @@ class MainDashboard extends Component {
                           >
                             <td className="text-left">{i.market + " : "}</td>
                             <td className="text-left">
-                              {i.marketStatus !== "Closed" ? (
-                                <p className="text-success m-0">
+                              {i.marketStatus === "Closed" || i.marketStatus === "Close" ? (
+                                <p className="text-danger m-0">
                                   {i.marketStatusMessage}
                                 </p>
                               ) : (
-                                <p className="text-danger m-0">
+                                <p className="text-success m-0">
                                   {i.marketStatusMessage}
                                 </p>
                               )}
@@ -216,14 +216,14 @@ class MainDashboard extends Component {
             )
             .map((j) => {
               return (
-                <div className="col-lg-6 col-xxl-3 mb-3" key={j.index}>
+                <div className="col-lg-3 col-xxl-3 mb-3" key={j.index}>
                   {j.variation < 0 ? (
                     <div className="col bg-light-danger px-6 py-8 rounded-xl shadow dashboard__index">
                       <div className="row">
-                        <p className="text-info font-weight-bolder display-4 dashboard__index-title">
+                        <p className="text-info font-weight-bolder h1 dashboard__index-title">
                           {j.index}
                         </p>
-                        <p className="text-secondary font-weight-bold display-4 mt-2 dashboard__index-value">
+                        <p className="text-secondary font-weight-bold h1 mt-2 dashboard__index-value">
                           {j.last.toLocaleString("hi-IN")}
                         </p>
                       </div>
@@ -234,26 +234,26 @@ class MainDashboard extends Component {
                         </p>
                       </div>
                       <div className="row">
-                        <p className="text-warning h3 dashboard__index-ohlc">
-                          {j.open.toLocaleString("hi-IN")} |{" "}
-                          {j.high.toLocaleString("hi-IN")} |{" "}
-                          {j.low.toLocaleString("hi-IN")}|{" "}
+                        <p className="text-warning h5 dashboard__index-ohlc">
+                          {j.open.toLocaleString("hi-IN")} <span className="text-info">{" "}|{" "}</span>
+                          {j.high.toLocaleString("hi-IN")} <span className="text-info">{" "}|{" "}</span>
+                          {j.low.toLocaleString("hi-IN")}<span className="text-info">{" "}|{" "}</span>
                           {j.previousClose.toLocaleString("hi-IN")}
                         </p>
                       </div>
                       <div className="row m-0">
                         <pre className="text-muted dashboard__index-ohlc-title">
-                          {"Open           High            Low         Close"}
+                          {"Open     High      Low     Close"}
                         </pre>
                       </div>
                     </div>
                   ) : (
                     <div className="col bg-light-success px-6 py-8 rounded-xl shadow dashboard__index">
                       <div className="row">
-                        <p className="text-secondary text-muted font-weight-bolder display-4 dashboard__index-title">
+                        <p className="text-secondary text-muted font-weight-bolder h1 dashboard__index-title">
                           {j.index}
                         </p>
-                        <p className="text-secondary font-weight-bold display-4 mt-2 dashboard__index-value">
+                        <p className="text-secondary font-weight-bold h1 mt-2 dashboard__index-value">
                           {j.last.toLocaleString("hi-IN")}
                         </p>
                       </div>
@@ -264,16 +264,16 @@ class MainDashboard extends Component {
                         </p>
                       </div>
                       <div className="row">
-                        <p className="text-warning h3 dashboard__index-ohlc">
-                          {j.open.toLocaleString("hi-IN")} |{" "}
-                          {j.high.toLocaleString("hi-IN")} |{" "}
-                          {j.low.toLocaleString("hi-IN")}|{" "}
+                        <p className="text-warning h5 dashboard__index-ohlc">
+                          {j.open.toLocaleString("hi-IN")} <span className="text-info">{" "}|{" "}</span>
+                          {j.high.toLocaleString("hi-IN")} <span className="text-info">{" "}|{" "}</span>
+                          {j.low.toLocaleString("hi-IN")}<span className="text-info">{" "}|{" "}</span>
                           {j.previousClose.toLocaleString("hi-IN")}
                         </p>
                       </div>
                       <div className="row m-0">
                         <pre className="text-muted dashboard__index-ohlc-title">
-                          {"Open           High            Low         Close"}
+                          {"Open     High      Low     Close"}
                         </pre>
                       </div>
                     </div>
@@ -286,13 +286,13 @@ class MainDashboard extends Component {
             .filter((i) => i.symbol === "GOLD")
             .map((j) => {
               return (
-                <div className="col-lg-6 col-xxl-3" key={j.symbol}>
+                <div className="col-lg-3 col-xxl-3" key={j.symbol}>
                   <div className="col bg-light-warning px-6 py-8 rounded-xl mr-7 mb-7 shadow">
                     <div className="row">
-                      <p className="text-warning font-weight-bolder display-4 dashboard__commodity-title">
+                      <p className="text-warning font-weight-bolder h1 dashboard__commodity-title">
                         {j.symbol}
                       </p>
-                      <p className="text-secondary font-weight-bold display-4 dashboard__commodity-value">
+                      <p className="text-secondary font-weight-bold h1 dashboard__commodity-value">
                         {(j.spotPrice * 1).toLocaleString("hi-IN")} (
                         {(j.spotPrice * 1 - j.lastSpotPrice * 1).toLocaleString(
                           "hi-IN"

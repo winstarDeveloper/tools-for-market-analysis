@@ -262,6 +262,7 @@ class OptionGreeksCalculator extends Component {
     let m = myDate.getMonth();
     m += 1;
     let y = myDate.getFullYear();
+    y = Math.abs(y);
     let newdate;
     if (m < 10 && d < 10) {
       newdate = y + "-0" + m + "-0" + d;

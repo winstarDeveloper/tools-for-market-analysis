@@ -205,13 +205,17 @@ body {
   margin-right: 1rem; }
 
 .heatmap__index-percent {
-  font-size: 6rem;
+  font-size: 2.5rem;
   margin: 0.1rem;
   padding: 0; }
 
 .heatmap__max-min {
   height: 2.6rem;
   margin: auto 0 auto 0; }
+
+.niftyweightage__select-index {
+  width: 25rem;
+  margin: 1rem; }
 
 .optiongreeks__select-contract {
   width: 25rem; }

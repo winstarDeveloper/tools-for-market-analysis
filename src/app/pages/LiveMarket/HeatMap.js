@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Alert, Form, Button } from "react-bootstrap";
 import Select from "react-select";
 import { BoxLoading, CommonLoading } from "react-loadingg";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+
 import * as NseURL from "../../../app/utils/NSE_Urls";
 
 class HeatMap extends Component {
@@ -53,12 +56,18 @@ class HeatMap extends Component {
         "NIFTY ALPHA 50",
         "NIFTY200 QUALITY 30",
       ],
-      sortByOptions: ["High to LTP", "Open to LTP", "Low to LTP"],
+      sortByOptions: [
+        "Previous Close to LTP",
+        "High to LTP",
+        "Open to LTP",
+        "Low to LTP",
+      ],
       isSort: true,
       indexData: [],
       sortData: [],
       timestamp: "",
       maxUp: true,
+      trueRange: false,
     };
     this.getIndicesList = this.getIndicesList.bind(this);
     this.getIndexData = this.getIndexData.bind(this);
@@ -174,12 +183,45 @@ class HeatMap extends Component {
     return comparison;
   };
 
+  sortByTrueRange = (a, b) => {
+    let comparison = 0;
+    if (this.state.trueRange) {
+      if (this.state.maxUp) {
+        if (a.trueRangePercent > b.trueRangePercent) {
+          comparison = -1;
+        } else {
+          comparison = 1;
+        }
+      } else {
+        if (a.trueRangePercent > b.trueRangePercent) {
+          comparison = 1;
+        } else {
+          comparison = -1;
+        }
+      }
+    }
+    return comparison;
+  };
+
   setData = () => {
-    console.log("setdata");
     this.setState({
       sortData: this.state.indexData
         .map((i) => {
-          if (this.state.sortBy === "Open to LTP") {
+          if (this.state.sortBy === "High to LTP") {
+            return {
+              symbol: i.symbol,
+              priority: i.priority,
+              open: i.open,
+              high: i.dayHigh,
+              low: i.dayLow,
+              close: i.previousClose,
+              currentPrice: i.lastPrice,
+              pchange: ((i.lastPrice - i.dayHigh) * 100) / i.dayHigh,
+              change: i.lastPrice - i.dayHigh,
+              trueRange: (i.dayHigh - i.dayLow),
+              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
+            };
+          } else if (this.state.sortBy === "Open to LTP") {
             return {
               symbol: i.symbol,
               priority: i.priority,
@@ -189,6 +231,9 @@ class HeatMap extends Component {
               close: i.previousClose,
               currentPrice: i.lastPrice,
               pchange: ((i.lastPrice - i.open) * 100) / i.open,
+              change: i.lastPrice - i.open,
+              trueRange: (i.dayHigh - i.dayLow),
+              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
             };
           } else if (this.state.sortBy === "Low to LTP") {
             return {
@@ -200,6 +245,9 @@ class HeatMap extends Component {
               close: i.previousClose,
               currentPrice: i.lastPrice,
               pchange: ((i.lastPrice - i.dayLow) * 100) / i.dayLow,
+              change: i.lastPrice - i.dayLow,
+              trueRange: (i.dayHigh - i.dayLow),
+              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
             };
           } else {
             return {
@@ -210,11 +258,16 @@ class HeatMap extends Component {
               low: i.dayLow,
               close: i.previousClose,
               currentPrice: i.lastPrice,
-              pchange: ((i.lastPrice - i.dayHigh) * 100) / i.dayHigh,
+              pchange:
+                ((i.lastPrice - i.previousClose) * 100) / i.previousClose,
+              change: i.lastPrice - i.previousClose,
+              trueRange: (i.dayHigh - i.dayLow),
+              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
             };
           }
         })
         .sort(this.sortByPChange)
+        .sort(this.sortByTrueRange)
         .sort(this.sortByPriority),
     });
     console.log("sortData: ", this.state.sortData);
@@ -247,9 +300,14 @@ class HeatMap extends Component {
       this.setData();
       await this.setState({ loadingIndex: false, isSort: false });
     } else {
-      this.setState({ sortBy: "High to LTP" });
+      this.setState({ sortBy: "Previous Close to LTP" });
     }
   }
+
+  handleTrueRangeChange = () => {
+    this.setState({ trueRange: !this.state.trueRange });
+    this.updateData();
+  };
 
   render() {
     return (
@@ -308,6 +366,21 @@ class HeatMap extends Component {
                   isClearable={true}
                 />
               </Form.Group>
+              <Form.Label>True Range:</Form.Label>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={this.state.trueRange}
+                    onChange={this.handleTrueRangeChange}
+                    value="true_range"
+                    color="primary"
+                    disabled={this.state.isSort}
+                  />
+                }
+                label={this.state.trueRange ? "ON " : "OFF"}
+              />
+
+              <Form.Label>Sort by Min/Max:</Form.Label>
               {this.state.maxUp ? (
                 <Button
                   className="btn btn-primary font-weight-bolder font-size-sm heatmap__max-min"
@@ -340,74 +413,88 @@ class HeatMap extends Component {
                 {this.state.sortData.map((i) => {
                   return (
                     <div
-                      className="col-lg-6 col-xxl-3 mb-3 animate__animated animate__fadeIn"
+                      className="col-lg-3 col-xxl-3 mb-3 animate__animated animate__fadeIn"
                       key={i.symbol}
                     >
                       {i.pchange > 0 ? (
                         <div className="col bg-light-success px-6 py-8 rounded-xl shadow heatmap__index">
                           <div className="row mb-3">
-                            <p className="text-success font-weight-bolder display-4 heatmap__index-title">
+                            <p className="text-success font-weight-bolder h1 heatmap__index-title">
                               {i.symbol}
                             </p>
-                            <p className="text-secondary font-weight-bold display-4 heatmap__index-value">
+                            <p className="text-secondary font-weight-bold h1 heatmap__index-value">
                               {i.currentPrice.toLocaleString("hi-IN")}
                             </p>
                           </div>
                           <div className="row text-success d-flex justify-content-center heatmap__index-percent">
                             {i.pchange.toLocaleString("hi-IN", {
                               maximumFractionDigits: 2,
-                            })}{" "}
-                            %
+                            })}
+                            %{"  |  " + i.change.toLocaleString("hi-IN")}
                           </div>
+                          {this.state.trueRange ? (
+                            <div className="row text-primary h3 d-flex justify-content-center animate__animated animate__bounceIn">
+                              True Range:{" "}
+                              {i.trueRangePercent.toLocaleString("hi-IN", {
+                                maximumFractionDigits: 2,
+                              })}% | {i.trueRange.toLocaleString("hi-IN")}
+                            </div>
+                          ) : null}
                           <div className="row d-flex justify-content-center">
-                            <p className="text-warning h3 heatmap__index-ohlc">
+                            <p className="text-warning heatmap__index-ohlc">
                               {i.open.toLocaleString("hi-IN")}{" "}
-                              <span className="text-primary">|</span>{" "}
+                              <span className="text-info">|</span>{" "}
                               {i.high.toLocaleString("hi-IN")}{" "}
-                              <span className="text-primary">|</span>{" "}
+                              <span className="text-info">|</span>{" "}
                               {i.low.toLocaleString("hi-IN")}{" "}
-                              <span className="text-primary">|</span>{" "}
+                              <span className="text-info">|</span>{" "}
                               {i.close.toLocaleString("hi-IN")}
                             </p>
                           </div>
                           <div className="row m-0 p-0 d-flex justify-content-center">
                             <pre className="text-muted heatmap__index-ohlc-title">
-                              {
-                                "Open           High            Low         Close"
-                              }
+                              {"Open     High      Low     Close"}
                             </pre>
                           </div>
                         </div>
                       ) : (
                         <div className="col bg-light-danger px-6 py-8 rounded-xl shadow heatmap__index">
                           <div className="row mb-3">
-                            <p className="text-danger font-weight-bolder display-4 heatmap__index-title">
+                            <p className="text-danger font-weight-bolder h1 heatmap__index-title">
                               {i.symbol}
                             </p>
-                            <p className="text-secondary font-weight-bold display-4 heatmap__index-value">
+                            <p className="text-secondary font-weight-bold h1 heatmap__index-value">
                               {i.currentPrice.toLocaleString("hi-IN")}
                             </p>
                           </div>
                           <div className="row text-danger d-flex justify-content-center heatmap__index-percent">
                             {i.pchange.toLocaleString("hi-IN", {
                               maximumFractionDigits: 2,
-                            })}{" "}
-                            %
+                            })}
+                            %{"  |  " + i.change.toLocaleString("hi-IN")}
                           </div>
+                          {this.state.trueRange ? (
+                            <div className="row text-primary h3 d-flex justify-content-center animate__animated animate__bounceIn">
+                              True Range:{" "}
+                              {i.trueRangePercent.toLocaleString("hi-IN", {
+                                maximumFractionDigits: 2,
+                              })}% | {i.trueRange.toLocaleString("hi-IN")}
+                            </div>
+                          ) : null}
                           <div className="row d-flex justify-content-center">
-                            <p className="text-warning h3 heatmap__index-ohlc">
+                            <p className="text-warning heatmap__index-ohlc">
                               {i.open.toLocaleString("hi-IN")}{" "}
-                              <span className="text-primary">|</span>{" "}
+                              <span className="text-info">|</span>{" "}
                               {i.high.toLocaleString("hi-IN")}{" "}
-                              <span className="text-primary">|</span>{" "}
+                              <span className="text-info">|</span>{" "}
                               {i.low.toLocaleString("hi-IN")}{" "}
-                              <span className="text-primary">|</span>{" "}
+                              <span className="text-info">|</span>{" "}
                               {i.close.toLocaleString("hi-IN")}
                             </p>
                           </div>
                           <div className="row m-0 p-0 d-flex justify-content-center">
                             <pre className="text-muted heatmap__index-ohlc-title">
-                              {"Open         High          Low       Close"}
+                              {"Open     High      Low     Close"}
                             </pre>
                           </div>
                         </div>

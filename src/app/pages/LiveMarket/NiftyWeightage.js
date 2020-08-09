@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Alert, Table } from "react-bootstrap";
-import { BoxLoading } from "react-loadingg";
+import { Form, Alert, Table } from "react-bootstrap";
+import Select from "react-select";
+import { CommonLoading, BoxLoading } from "react-loadingg";
 import Chart from "chart.js";
 
 import * as NseURL from "../../../app/utils/NSE_Urls";
@@ -10,234 +11,60 @@ class NiftyWeightage extends Component {
     super(props);
     this.state = {
       loading: true,
+      chartRendered: false,
       message: "",
-      stockList: [],
-      //   marketCapList: [],
-      marketCapList: [
-        {
-          symbol: "DRREDDY",
-          marketCap: 7480014.03,
-          weightage: 0.8788698608099786,
-        },
-        {
-          symbol: "WIPRO",
-          marketCap: 16223367.7,
-          weightage: 1.9061767605224804,
-        },
-        { symbol: "VEDL", marketCap: 4161401.64, weightage: 0.488947008047419 },
-        {
-          symbol: "SUNPHARMA",
-          marketCap: 12265095.49,
-          weightage: 1.4410965972636547,
-        },
-        {
-          symbol: "HINDUNILVR",
-          marketCap: 51511139.12,
-          weightage: 6.052339940404877,
-        },
-        {
-          symbol: "HEROMOTOCO",
-          marketCap: 5416078.22,
-          weightage: 0.6363661742152317,
-        },
-        {
-          symbol: "SBIN",
-          marketCap: 16675636.65,
-          weightage: 1.9593164401462064,
-        },
-        {
-          symbol: "MARUTI",
-          marketCap: 18910211.76,
-          weightage: 2.2218695193274156,
-        },
-        {
-          symbol: "COALINDIA",
-          marketCap: 7934512.72,
-          weightage: 0.9322715254080085,
-        },
-        {
-          symbol: "BAJAJFINSV",
-          marketCap: 9842641.39,
-          weightage: 1.156468535184263,
-        },
-        {
-          symbol: "POWERGRID",
-          marketCap: 9272992.65,
-          weightage: 1.0895372290628518,
-        },
-        {
-          symbol: "BHARTIARTL",
-          marketCap: 30021932.12,
-          weightage: 3.527449440298848,
-        },
-        {
-          symbol: "TATAMOTORS",
-          marketCap: 3189365.55,
-          weightage: 0.37473689832111734,
-        },
-        {
-          symbol: "GRASIM",
-          marketCap: 3959994.94,
-          weightage: 0.4652825767127632,
-        },
-        {
-          symbol: "AXISBANK",
-          marketCap: 12050044.97,
-          weightage: 1.4158290750609572,
-        },
-        {
-          symbol: "BPCL",
-          marketCap: 9062976.28,
-          weightage: 1.0648611980915947,
-        },
-        { symbol: "ONGC", marketCap: 9768586.8, weightage: 1.1477674355680583 },
-        {
-          symbol: "BRITANNIA",
-          marketCap: 9170852.52,
-          weightage: 1.0775361978513887,
-        },
-        { symbol: "IOC", marketCap: 8369187.28, weightage: 0.983343938977377 },
-        { symbol: "HDFC", marketCap: 31308733.22, weightage: 3.67864310104752 },
-        {
-          symbol: "CIPLA",
-          marketCap: 5536917.74,
-          weightage: 0.6505643042851488,
-        },
-        {
-          symbol: "RELIANCE",
-          marketCap: 133247943.1,
-          weightage: 15.656067052258317,
-        },
-        {
-          symbol: "ASIANPAINT",
-          marketCap: 16738001.44,
-          weightage: 1.966644037940397,
-        },
-        {
-          symbol: "HCLTECH",
-          marketCap: 18887109.07,
-          weightage: 2.2191550514316063,
-        },
-        {
-          symbol: "UPL",
-          marketCap: 3534716.01,
-          weightage: 0.41531410973991223,
-        },
-        {
-          symbol: "TITAN",
-          marketCap: 9232976.06,
-          weightage: 1.0848354497958161,
-        },
-        {
-          symbol: "INDUSINDBK",
-          marketCap: 3613825.84,
-          weightage: 0.4246091785729317,
-        },
-        {
-          symbol: "TECHM",
-          marketCap: 6503052.06,
-          weightage: 0.764080981117123,
-        },
-        {
-          symbol: "NESTLEIND",
-          marketCap: 15947159.43,
-          weightage: 1.8737234625960506,
-        },
-        {
-          symbol: "ICICIBANK",
-          marketCap: 22368448.41,
-          weightage: 2.628197629280635,
-        },
-        { symbol: "NTPC", marketCap: 8583528.44, weightage: 1.008528114394632 },
-        {
-          symbol: "ULTRACEMCO",
-          marketCap: 11957778.33,
-          weightage: 1.4049881369652564,
-        },
-        {
-          symbol: "KOTAKBANK",
-          marketCap: 27282765.35,
-          weightage: 3.2056089854240297,
-        },
-        { symbol: "LT", marketCap: 12788352.92, weightage: 1.502577121608592 },
-        {
-          symbol: "TCS",
-          marketCap: 85591895.14,
-          weightage: 10.056683940224387,
-        },
-        {
-          symbol: "HDFCBANK",
-          marketCap: 57672631.13,
-          weightage: 6.7762890671701514,
-        },
-        {
-          symbol: "HINDALCO",
-          marketCap: 3618764.4,
-          weightage: 0.42518943838559964,
-        },
-        {
-          symbol: "EICHERMOT",
-          marketCap: 5780281.9,
-          weightage: 0.6791585588637511,
-        },
-        {
-          symbol: "INFY",
-          marketCap: 40980820.15,
-          weightage: 4.815072211984777,
-        },
-        { symbol: "ZEEL", marketCap: 1345666.77, weightage: 0.158110126813026 },
-        {
-          symbol: "SHREECEM",
-          marketCap: 7714063.92,
-          weightage: 0.906369728246309,
-        },
-        {
-          symbol: "TATASTEEL",
-          marketCap: 4128586.62,
-          weightage: 0.48509138265096813,
-        },
-        {
-          symbol: "GAIL",
-          marketCap: 4361307.18,
-          weightage: 0.5124350594615342,
-        },
-        {
-          symbol: "INFRATEL",
-          marketCap: 3558646.27,
-          weightage: 0.4181258135938082,
-        },
-        {
-          symbol: "ITC",
-          marketCap: 23794281.87,
-          weightage: 2.7957270014853566,
-        },
-        {
-          symbol: "BAJFINANCE",
-          marketCap: 19402104.82,
-          weightage: 2.2796648634860937,
-        },
-        {
-          symbol: "ADANIPORTS",
-          marketCap: 6344144.87,
-          weightage: 0.7454100615978712,
-        },
-        {
-          symbol: "JSWSTEEL",
-          marketCap: 5172851.74,
-          weightage: 0.6077880964515324,
-        },
-        { symbol: "M&M", marketCap: null, weightage: 0 },
-        {
-          symbol: "BAJAJ-AUTO",
-          marketCap: 8811225.76,
-          weightage: 1.0352815818523937,
-        },
+      indicesList: [
+        "NIFTY 50",
+        "NIFTY 500",
+        "NIFTY NEXT 50",
+        "NIFTY MIDCAP 50",
+        "NIFTY MIDCAP 150",
+        "NIFTY SMALLCAP 50",
+        "NIFTY SMALLCAP 250",
+        "NIFTY MIDSMALLCAP 400",
+        "NIFTY 100",
+        "NIFTY 200",
+        "NIFTY AUTO",
+        "NIFTY BANK",
+        "NIFTY ENERGY",
+        "NIFTY FINANCIAL SERVICES",
+        "NIFTY FMCG",
+        "NIFTY IT",
+        "NIFTY MEDIA",
+        "NIFTY METAL",
+        "NIFTY PHARMA",
+        "NIFTY PSU BANK",
+        "NIFTY REALTY",
+        "NIFTY PRIVATE BANK",
+        "NIFTY COMMODITIES",
+        "NIFTY INDIA CONSUMPTION",
+        "NIFTY CPSE",
+        "NIFTY INFRASTRUCTURE",
+        "NIFTY MNC",
+        "NIFTY GROWTH SECTORS 15",
+        "NIFTY PSE",
+        "NIFTY SERVICES SECTOR",
+        "NIFTY100 LIQUID 15",
+        "NIFTY MIDCAP LIQUID 15",
+        "NIFTY DIVIDEND OPPORTUNITIES 50",
+        "NIFTY50 VALUE 20",
+        "NIFTY100 QUALITY 30",
+        "NIFTY50 EQUAL WEIGHT",
+        "NIFTY100 EQUAL WEIGHT",
+        "NIFTY100 LOW VOLATILITY 30",
+        "NIFTY ALPHA 50",
+        "NIFTY200 QUALITY 30",
       ],
-      totalMarketCap: 851094611.7899998,
-      //   totalMarketCap: 0.0,
+      selectedIndex: "",
+      stockList: [],
+      marketCapList: [],
+      totalMarketCap: 0.0,
+      disableIndexSelect: false
     };
     this.getIndexData = this.getIndexData.bind(this);
     this.getMarketCap = this.getMarketCap.bind(this);
+    this.handleChangeIndex = this.handleChangeIndex.bind(this);
+    this.getStockMarketCaps = this.getStockMarketCaps.bind(this);
   }
 
   async getIndexData(indexName) {
@@ -251,7 +78,7 @@ class NiftyWeightage extends Component {
       if (Data) {
         this.setState({
           stockList: Data.data
-            .filter((i) => i.symbol !== "NIFTY 50")
+            .filter((i, idx) => idx !== 0)
             .map((j) => j.symbol),
           timestamp: Data.timestamp,
         });
@@ -259,12 +86,12 @@ class NiftyWeightage extends Component {
         this.setState({
           loading: false,
           message: "Error Receiving Data",
-          indexData: [],
+          stockList: [],
         });
       }
       console.log("Stock List: ", this.state.stockList);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ loading: true, message: err.message, stockList: [] });
       console.log("Error: ", err.message);
     }
   }
@@ -283,7 +110,9 @@ class NiftyWeightage extends Component {
             ...this.state.marketCapList,
             {
               symbol: stockName,
-              marketCap: Data.marketDeptOrderBook.tradeInfo.totalMarketCap,
+              marketCap: Data.marketDeptOrderBook
+                ? Data.marketDeptOrderBook.tradeInfo.totalMarketCap
+                : 0,
               weightage: 0,
             },
           ],
@@ -304,13 +133,19 @@ class NiftyWeightage extends Component {
 
   async componentDidMount() {
     await this.setState({ loading: false });
-    this.renderChart();
+  }
+
+  async getStockMarketCaps() {
+    for (let i = 0; i < this.state.stockList.length; i++) {
+      await this.getMarketCap(this.state.stockList[i]);
+    }
   }
 
   getTotalMarketCap = () => {
     let total = 0;
     this.state.marketCapList.map((i) => (total += i.marketCap));
     this.setState({ totalMarketCap: total });
+    console.log("Total: ", total);
   };
 
   getWeightage = () => {
@@ -321,6 +156,7 @@ class NiftyWeightage extends Component {
         weightage: (i.marketCap * 100) / this.state.totalMarketCap,
       })),
     });
+    console.log("Got Weightage");
   };
 
   getTotalWeightage = () => {
@@ -372,41 +208,108 @@ class NiftyWeightage extends Component {
     });
   };
 
+  async handleChangeIndex(value) {
+    if (value) {
+      await this.setState({
+        selectedIndex: ""
+      });
+      await this.setState({
+        selectedIndex: value.label,
+        chartRendered: false,
+        stockList: [],
+        marketCapList: [],
+        totalMarketCap: 0.0,
+        disableIndexSelect: true
+      });
+      await this.getIndexData(value.label);
+      await this.getStockMarketCaps();
+      await this.getTotalMarketCap();
+      await this.getWeightage();
+      await this.renderChart();
+      await this.setState({
+        chartRendered: true,
+        disableIndexSelect: false
+      });
+    } else {
+      await this.setState({
+        selectedIndex: "",
+        chartRendered: false,
+        stockList: [],
+        marketCapList: [],
+        totalMarketCap: 0.0,
+        disableIndexSelect: false
+      });
+    }
+  }
+
   render() {
     return !this.state.loading ? (
-      <div className="row niftyweightage">
-        <div className="col-lg-4">
-          <Table
-            striped
-            bordered
-            hover
-            className="niftyweightage__table bg-light"
-          >
-            <thead>
-              <tr className="bg-light-dark niftyweightage__table-heading">
-                <th className="text-center">SYMBOL</th>
-                <th className="text-center">Weightage</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.marketCapList
-                .sort(this.sortByWeightage)
-                .map((i, index) => {
-                  return (
-                    <tr key={index} className="niftyweightage__table-data">
-                      <td className="h3">{i.symbol}</td>
-                      <td className="h3 text-center">
-                        {i.weightage.toFixed(2)}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </Table>
+      <div className="niftyweightage">
+        <div className="row d-flex justify-content-center">
+          <Form.Group>
+            <Form.Label>Select Index:</Form.Label>
+            <Select
+              className="niftyweightage__select-index"
+              inputId="select_index"
+              TextFieldProps={{
+                label: "Select Index: ",
+                InputLabelProps: {
+                  htmlFor: "select_index",
+                  shrink: true,
+                },
+                placeholder: "Select Index",
+              }}
+              options={[
+                ...this.state.indicesList.map((i) => {
+                  return {
+                    label: i,
+                  };
+                }),
+              ]}
+              isClearable={true}
+              onChange={this.handleChangeIndex}
+              isDisabled={this.state.disableIndexSelect}
+            />
+          </Form.Group>
         </div>
-        <div className="col-lg-8 niftyweightage__visual">
-          <canvas id="myChart" width="100vw" height="70vh"></canvas>
-        </div>
+
+        {this.state.selectedIndex !== "" ? (
+          <div className="row">
+            <div className="col-lg-4">
+              <Table
+                striped
+                bordered
+                hover
+                className="niftyweightage__table bg-light"
+              >
+                <thead>
+                  <tr className="bg-light-dark niftyweightage__table-heading">
+                    <th className="text-center">SYMBOL</th>
+                    <th className="text-center">Weightage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.marketCapList
+                    .sort(this.sortByWeightage)
+                    .map((i, index) => {
+                      return (
+                        <tr key={index} className="niftyweightage__table-data">
+                          <td className="h3">{i.symbol}</td>
+                          <td className="h3 text-center">
+                            {i.weightage.toFixed(2)} %
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+            </div>
+            {this.state.chartRendered ? null : <CommonLoading />}
+            <div className="col-lg-8 niftyweightage__visual">
+              <canvas id="myChart" width="100vw" height="70vh"></canvas>
+            </div>
+          </div>
+        ) : null}
       </div>
     ) : (
       <>
