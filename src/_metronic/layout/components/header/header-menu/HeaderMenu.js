@@ -69,7 +69,7 @@ export function HeaderMenu({ layoutProps }) {
                   <i className="menu-bullet menu-bullet-dot">
                     <span />
                   </i>
-                  <span className="menu-text">View All Commodities</span>
+                  <span className="menu-text">View Commodities Spot</span>
                 </NavLink>
               </li>
 

@@ -4,6 +4,8 @@ import Select from "react-select";
 import TextField from "@material-ui/core/TextField";
 import { BoxLoading, CommonLoading } from "react-loadingg";
 
+import store from "./../../../../redux/store";
+import * as Helper from "./../../../utils/helpers";
 import * as NseURL from "./../../../utils/NSE_Urls";
 
 const gaussian = require("./../../../utils/gaussian");
@@ -65,20 +67,18 @@ class OptionGreeksCalculator extends Component {
 
       if (Data) {
         this.setState({
-          loading: false,
           data: ["NIFTY", "BANKNIFTY", ...Data],
           message: "",
         });
       } else {
         this.setState({
-          loading: false,
           message: "Error Receiving Data",
           data: [],
         });
       }
       console.log("Data: ", this.state.data);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
     }
   }
@@ -93,7 +93,6 @@ class OptionGreeksCalculator extends Component {
 
       if (Data) {
         await this.setState({
-          loading: false,
           optionChainData: Data,
           strikePrices: Data.records.strikePrices,
           expiryDates: Data.records.expiryDates,
@@ -101,14 +100,13 @@ class OptionGreeksCalculator extends Component {
         });
       } else {
         this.setState({
-          loading: false,
           message: "Error Receiving Data",
           data: {},
         });
       }
       console.log("Option Chain Data: ", this.state.optionChainData);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
     }
   }
@@ -123,7 +121,6 @@ class OptionGreeksCalculator extends Component {
 
       if (Data) {
         await this.setState({
-          loading: false,
           optionChainData: Data,
           strikePrices: Data.records.strikePrices,
           expiryDates: Data.records.expiryDates,
@@ -131,14 +128,13 @@ class OptionGreeksCalculator extends Component {
         });
       } else {
         this.setState({
-          loading: false,
           message: "Error Receiving Data",
           data: {},
         });
       }
       console.log("Option Chain Data: ", this.state.optionChainData);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
     }
   }
@@ -148,11 +144,20 @@ class OptionGreeksCalculator extends Component {
   };
 
   async updateData(value) {
+    await this.getSymbols();
+
     if (value) {
       if (["NIFTY", "BANKNIFTY"].includes(value)) {
         await this.getIndicesData(value);
       } else {
         await this.getEquitesData(value);
+      }
+      if (this.state.message.length !== 0) {
+        this.setUpdateInterval(3, this.state.contractName);
+        return;
+      } else {
+        this.setUpdateInterval(25, this.state.contractName);
+        await this.setState({ loading: false });
       }
       await this.setState({
         underlyingValue: this.state.optionChainData.records.underlyingValue,
@@ -163,14 +168,43 @@ class OptionGreeksCalculator extends Component {
       this.setTables();
       this.calculateGreeks();
     }
+
+    if (this.state.message.length !== 0) {
+      this.setUpdateInterval(3, this.state.contractName);
+      return;
+    } else {
+      this.setUpdateInterval(25, this.state.contractName);
+      await this.setState({ loading: false });
+    }
+
+    if (
+      Helper.checkMarketStatus(store.getState()) ||
+      this.state.message.length !== 0
+    ) {
+    } else {
+      console.log("Market Closed");
+      clearInterval(this.interval);
+    }
   }
 
-  async componentDidMount() {
-    this.getSymbols();
+  setUpdateInterval = (time, contractName) => {
+    clearInterval(this.interval);
     this.interval = setInterval(
-      () => this.updateData(this.state.contractName),
-      25000
+      () => this.updateData(contractName),
+      time * 1000
     );
+  };
+
+  async componentDidMount() {
+    await this.setState({ loading: true });
+    await this.getSymbols();
+
+    if (this.state.message.length !== 0) {
+      this.setUpdateInterval(3, this.state.contractName);
+    } else {
+      this.setUpdateInterval(25, this.state.contractName);
+      await this.setState({ loading: false });
+    }
   }
 
   componentWillUnmount() {
@@ -189,6 +223,15 @@ class OptionGreeksCalculator extends Component {
       } else {
         await this.getEquitesData(value.label);
       }
+
+      if (this.state.message.length !== 0) {
+        this.setUpdateInterval(3, this.state.contractName);
+        return;
+      } else {
+        this.setUpdateInterval(25, this.state.contractName);
+        await this.setState({ loading: false });
+      }
+
       await this.setState({
         expiryDates: this.state.optionChainData.records.expiryDates,
         expiry: this.state.expiryDates[0],
@@ -278,7 +321,7 @@ class OptionGreeksCalculator extends Component {
       int_rate = parseFloat(this.state.interest);
     //   div_yld = parseFloat(this.state.dividend);
 
-    console.log("Val: ", spot, strike, expiry, volt, int_rate);
+    // console.log("Val: ", spot, strike, expiry, volt, int_rate);
     //Validation
     let error = null;
 
@@ -377,7 +420,7 @@ class OptionGreeksCalculator extends Component {
             option_vega_value: call_vega.toFixed(3),
           },
         });
-        console.log("Greeks: ", this.state.greeks);
+        // console.log("Greeks: ", this.state.greeks);
       }
     }
   }
@@ -398,6 +441,14 @@ class OptionGreeksCalculator extends Component {
             {this.state.errorValues && this.state.contractName !== "" ? (
               <Alert variant="danger" className="row spotfuturespread__alert">
                 {this.state.message}
+              </Alert>
+            ) : null}
+            { this.state.message !== "" ? (
+              <Alert variant="danger" className="row spotfuturespread__alert">
+                {this.state.message}
+                <div className="spinner-border text-warning" role="status">
+                  <span className="sr-only">Loading...</span>
+                </div>
               </Alert>
             ) : null}
 

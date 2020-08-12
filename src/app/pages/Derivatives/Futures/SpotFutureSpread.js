@@ -3,6 +3,8 @@ import { Card, Alert } from "react-bootstrap";
 import Select from "react-select";
 import { BoxLoading } from "react-loadingg";
 
+import store from "./../../../../redux/store";
+import * as Helper from "./../../../utils/helpers";
 import * as NseURL from "./../../../utils/NSE_Urls";
 
 class SpotFutureSpread extends Component {
@@ -57,7 +59,7 @@ class SpotFutureSpread extends Component {
         },
       });
     }
-    console.log("Value: ", this.state.searchFor);
+    // console.log("Value: ", this.state.searchFor);
   }
 
   async getData() {
@@ -81,28 +83,32 @@ class SpotFutureSpread extends Component {
 
       if (Data) {
         this.setState({
-          loading: false,
           data: Data,
           timestamp: D1.timestamp,
           message: "",
         });
       } else {
         this.setState({
-          loading: false,
           message: "Error Receiving Data",
           data: [],
         });
       }
       console.log("Data: ", this.state.data);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
     }
   }
 
   async updateData() {
-    // if (!this.state.loading) {
     await this.getData();
+
+    if (this.state.message.length !== 0) {
+      this.setUpdateInterval(3);
+    } else {
+      this.setUpdateInterval(25);
+      await this.setState({ loading: false });
+    }
 
     if (this.state.searchFor !== "") {
       const ut = this.state.data
@@ -114,7 +120,6 @@ class SpotFutureSpread extends Component {
             underlyingValue: i.underlyingValue,
           };
         });
-        console.log('ut: ', ut[0]);
       let _p_d = ut[0].lastPrice - ut[0].underlyingValue;
       _p_d = +_p_d.toFixed(2);
       await this.setState({
@@ -122,13 +127,23 @@ class SpotFutureSpread extends Component {
           name: ut[0].label,
           spot: ut[0].underlyingValue,
           future: ut[0].lastPrice,
-          min: this.state.priceData.min < _p_d ? this.state.priceData.min : _p_d,
-          max: this.state.priceData.max > _p_d ? this.state.priceData.max : _p_d,
+          min:
+            this.state.priceData.min < _p_d ? this.state.priceData.min : _p_d,
+          max:
+            this.state.priceData.max > _p_d ? this.state.priceData.max : _p_d,
           p_d: _p_d,
         },
       });
     }
-    // }
+
+    if (
+      Helper.checkMarketStatus(store.getState()) ||
+      this.state.message.length !== 0
+    ) {
+    } else {
+      console.log("Market Closed");
+      clearInterval(this.interval);
+    }
   }
 
   componentWillUnmount() {
@@ -136,9 +151,21 @@ class SpotFutureSpread extends Component {
   }
 
   async componentDidMount() {
-    this.getData();
-    this.interval = setInterval(() => this.updateData(), 25000);
+    await this.setState({ loading: true });
+    await this.getData();
+
+    if (this.state.message.length !== 0) {
+      this.setUpdateInterval(3);
+    } else {
+      this.setUpdateInterval(25);
+      await this.setState({ loading: false });
+    }
   }
+
+  setUpdateInterval = (time) => {
+    clearInterval(this.interval);
+    this.interval = setInterval(() => this.updateData(), time * 1000);
+  };
 
   render() {
     return this.state.loading ? (
@@ -151,99 +178,109 @@ class SpotFutureSpread extends Component {
         <BoxLoading />
       </>
     ) : (
-      <div className="spotfuturespread">
-        <div className="row">
-          <Select
-            className="spotfuturespread__search-input"
-            inputId="search_contract"
-            TextFieldProps={{
-              label: "Search Contract...",
-              InputLabelProps: {
-                htmlFor: "search_contract",
-                shrink: true,
-              },
-              placeholder: "Search Contract",
-            }}
-            options={[
-              { label: "None" },
-              ...this.state.data.map((i) => {
-                return {
-                  label: i.contract,
-                  lastPrice: i.lastPrice,
-                  underlyingValue: i.underlyingValue,
-                };
-              }),
-            ]}
-            value={this.state.searchFor}
-            onChange={this.handleChangeSearch}
-          />
-        </div>
-
-        <div className="row d-flex justify-content-center">
-          <p className="display-4 spotfuturespread__contract-name">
-            {this.state.priceData.name}
-          </p>
-        </div>
-        <div className="row d-flex justify-content-center">
-          <p className="text-muted spotfuturespread__contract-timestamp">
-            Last Updated - {this.state.timestamp}
-          </p>
-        </div>
-
-        <div className="row d-flex justify-content-center">
-          <div className="spotfuturespread__spot">
-            <Card border="success" style={{ width: "30rem" }}>
-              <Card.Header className="mb-5 text-muted text-center">
-                Spot Price
-              </Card.Header>
-              <Card.Body>
-                <Card.Text className="display-1 text-center">
-                  {this.state.priceData.spot.toLocaleString("hi-IN")}
-                </Card.Text>
-              </Card.Body>
-            </Card>
+      <>
+        {this.state.message !== "" ? (
+          <Alert variant="danger" className="row spotfuturespread__alert">
+            {this.state.message}
+            <div className="spinner-border text-warning" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </Alert>
+        ) : null}
+        <div className="spotfuturespread">
+          <div className="row">
+            <Select
+              className="spotfuturespread__search-input"
+              inputId="search_contract"
+              TextFieldProps={{
+                label: "Search Contract...",
+                InputLabelProps: {
+                  htmlFor: "search_contract",
+                  shrink: true,
+                },
+                placeholder: "Search Contract",
+              }}
+              options={[
+                { label: "None" },
+                ...this.state.data.map((i) => {
+                  return {
+                    label: i.contract,
+                    lastPrice: i.lastPrice,
+                    underlyingValue: i.underlyingValue,
+                  };
+                }),
+              ]}
+              value={this.state.searchFor}
+              onChange={this.handleChangeSearch}
+            />
           </div>
 
-          <div className="spotfuturespread__future">
-            <Card border="warning" style={{ width: "30rem" }}>
-              <Card.Header className="mb-5 text-muted text-center">
-                Future Price
-              </Card.Header>
-              <Card.Body>
-                <Card.Text className="display-1 text-center">
-                  {this.state.priceData.future.toLocaleString("hi-IN")}
-                </Card.Text>
-              </Card.Body>
-            </Card>
+          <div className="row d-flex justify-content-center">
+            <p className="display-4 spotfuturespread__contract-name">
+              {this.state.priceData.name}
+            </p>
+          </div>
+          <div className="row d-flex justify-content-center">
+            <p className="text-muted spotfuturespread__contract-timestamp">
+              Last Updated - {this.state.timestamp}
+            </p>
+          </div>
+
+          <div className="row d-flex justify-content-center">
+            <div className="spotfuturespread__spot">
+              <Card border="success" style={{ width: "30rem" }}>
+                <Card.Header className="mb-5 text-muted text-center">
+                  Spot Price
+                </Card.Header>
+                <Card.Body>
+                  <Card.Text className="display-1 text-center">
+                    {this.state.priceData.spot.toLocaleString("hi-IN")}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
+
+            <div className="spotfuturespread__future">
+              <Card border="warning" style={{ width: "30rem" }}>
+                <Card.Header className="mb-5 text-muted text-center">
+                  Future Price
+                </Card.Header>
+                <Card.Body>
+                  <Card.Text className="display-1 text-center">
+                    {this.state.priceData.future.toLocaleString("hi-IN")}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
+          </div>
+
+          <div className="row d-flex justify-content-center">
+            <p className="display-2 text-muted spotfuturespread__minvalue">
+              {this.state.priceData.min.toLocaleString("hi-IN")}
+            </p>
+            min
+            <p className="display-2 text-muted spotfuturespread__maxvalue">
+              {this.state.priceData.max.toLocaleString("hi-IN")}
+            </p>
+            max
+          </div>
+
+          <div className="row d-flex justify-content-center">
+            <div className="spotfuturespread__premium-discount">
+              <Card border="info" style={{ width: "35rem" }}>
+                <Card.Body>
+                  <Card.Text className="text-center spotfuturespread__pdvalue">
+                    {this.state.priceData.p_d.toLocaleString("hi-IN")}
+                  </Card.Text>
+                  <Card.Title className="text-muted text-center">
+                    Premium / Discount
+                  </Card.Title>
+                </Card.Body>
+              </Card>
+            </div>
           </div>
         </div>
-
-        <div className="row d-flex justify-content-center">
-          <p className="display-2 text-muted spotfuturespread__minvalue">
-            {this.state.priceData.min.toLocaleString("hi-IN")}
-          </p>
-          min
-          <p className="display-2 text-muted spotfuturespread__maxvalue">
-            {this.state.priceData.max.toLocaleString("hi-IN")}
-          </p>
-          max
-        </div>
-
-        <div className="row d-flex justify-content-center">
-          <div className="spotfuturespread__premium-discount">
-            <Card border="info" style={{ width: "35rem" }}>
-              <Card.Body>
-                <Card.Text className="text-center spotfuturespread__pdvalue">
-                  {this.state.priceData.p_d.toLocaleString("hi-IN")}
-                </Card.Text>
-                <Card.Title className="text-muted text-center">
-                  Premium / Discount
-                </Card.Title>
-              </Card.Body>
-            </Card>
-          </div>
-        </div>
-      </div>
+      </>
     );
   }
 }

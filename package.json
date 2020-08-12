@@ -94,6 +94,7 @@
         "copyfiles": "2.1.1",
         "node-sass": "^4.14.1",
         "prettier": "1.19.1",
+        "redux-devtools-extension": "^2.13.8",
         "serve": "^11.3.2",
         "webpack-cli": "3.3.11",
         "webpack-messages": "2.0.4",

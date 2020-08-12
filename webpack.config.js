@@ -74,6 +74,7 @@ const mainConfig = function () {
 				},
 			]
 		},
+		devtool: "source-map"
 	}
 };
 

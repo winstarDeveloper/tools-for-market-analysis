@@ -59,7 +59,7 @@ class NiftyWeightage extends Component {
       stockList: [],
       marketCapList: [],
       totalMarketCap: 0.0,
-      disableIndexSelect: false
+      disableIndexSelect: false,
     };
     this.getIndexData = this.getIndexData.bind(this);
     this.getMarketCap = this.getMarketCap.bind(this);
@@ -81,17 +81,20 @@ class NiftyWeightage extends Component {
             .filter((i, idx) => idx !== 0)
             .map((j) => j.symbol),
           timestamp: Data.timestamp,
+          message: "",
         });
       } else {
         this.setState({
-          loading: false,
           message: "Error Receiving Data",
           stockList: [],
         });
       }
-      console.log("Stock List: ", this.state.stockList);
+      // console.log("Stock List: ", this.state.stockList);
     } catch (err) {
-      this.setState({ loading: true, message: err.message, stockList: [] });
+      this.setState({
+        message: "Error Retrieving Data - Retrying ",
+        stockList: [],
+      });
       console.log("Error: ", err.message);
     }
   }
@@ -116,17 +119,17 @@ class NiftyWeightage extends Component {
               weightage: 0,
             },
           ],
+          message: "",
         });
       } else {
         this.setState({
-          loading: false,
           message: "Error Receiving Data",
           marketCapList: [],
         });
       }
-      console.log("Market Cap: ", this.state.marketCapList);
+      // console.log("Market Cap: ", this.state.marketCapList);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
     }
   }
@@ -136,16 +139,55 @@ class NiftyWeightage extends Component {
   }
 
   async getStockMarketCaps() {
-    for (let i = 0; i < this.state.stockList.length; i++) {
-      await this.getMarketCap(this.state.stockList[i]);
-    }
+    // for (let i = 0; i < this.state.stockList.length; i++) {
+    //   await this.getMarketCap(this.state.stockList[i]);
+    // }
+
+    let stockList = this.state.stockList;
+    let mktCapList = [];
+    let msg = "";
+    await Promise.all(
+      this.state.stockList.map((stockName) => {
+        return fetch(NseURL.Nse_main_URL + NseURL.QuoteInfoURL + stockName);
+      })
+    )
+      .then(function(responses) {
+        return Promise.all(
+          responses.map(function(response) {
+            return response.json();
+          })
+        );
+      })
+      .then(function(data) {
+        data.forEach((Data, idx) => {
+          mktCapList = [
+            ...mktCapList,
+            {
+              symbol: stockList[idx],
+              marketCap: Data.marketDeptOrderBook
+                ? Data.marketDeptOrderBook.tradeInfo.totalMarketCap
+                : 0,
+              weightage: 0,
+            },
+          ];
+        });
+        console.log("All Data: ", mktCapList);
+      })
+      .catch(function(error) {
+        console.log("Error All: ", error);
+        msg = "Error Retrieving Data - Retrying ";
+      });
+
+    mktCapList.length === 0
+      ? this.setState({ message: "Error CORS Issue - Retrying ", marketCapList: [] })
+      : this.setState({ message: msg, marketCapList: mktCapList });
   }
 
   getTotalMarketCap = () => {
     let total = 0;
     this.state.marketCapList.map((i) => (total += i.marketCap));
     this.setState({ totalMarketCap: total });
-    console.log("Total: ", total);
+    // console.log("Total: ", total);
   };
 
   getWeightage = () => {
@@ -156,13 +198,13 @@ class NiftyWeightage extends Component {
         weightage: (i.marketCap * 100) / this.state.totalMarketCap,
       })),
     });
-    console.log("Got Weightage");
+    // console.log("Got Weightage");
   };
 
   getTotalWeightage = () => {
     let w = 0;
     this.state.marketCapList.map((i) => (w += i.weightage));
-    console.log("Percentage: ", w);
+    // console.log("Percentage: ", w);
   };
 
   sortByWeightage = (a, b) => {
@@ -208,10 +250,18 @@ class NiftyWeightage extends Component {
     });
   };
 
+  setUpdateInterval = (time, value) => {
+    clearInterval(this.interval);
+    this.interval = setInterval(
+      () => this.handleChangeIndex(value),
+      time * 1000
+    );
+  };
+
   async handleChangeIndex(value) {
     if (value) {
       await this.setState({
-        selectedIndex: ""
+        selectedIndex: "",
       });
       await this.setState({
         selectedIndex: value.label,
@@ -219,16 +269,24 @@ class NiftyWeightage extends Component {
         stockList: [],
         marketCapList: [],
         totalMarketCap: 0.0,
-        disableIndexSelect: true
+        disableIndexSelect: true,
       });
       await this.getIndexData(value.label);
       await this.getStockMarketCaps();
+
+      if (this.state.message.length !== 0) {
+        this.setUpdateInterval(3, value);
+        return;
+      }else{
+        clearInterval(this.interval);
+      }
+
       await this.getTotalMarketCap();
       await this.getWeightage();
       await this.renderChart();
       await this.setState({
         chartRendered: true,
-        disableIndexSelect: false
+        disableIndexSelect: false,
       });
     } else {
       await this.setState({
@@ -237,7 +295,7 @@ class NiftyWeightage extends Component {
         stockList: [],
         marketCapList: [],
         totalMarketCap: 0.0,
-        disableIndexSelect: false
+        disableIndexSelect: false,
       });
     }
   }
@@ -245,6 +303,15 @@ class NiftyWeightage extends Component {
   render() {
     return !this.state.loading ? (
       <div className="niftyweightage">
+        {this.state.message !== "" ? (
+          <Alert variant="danger" className="row spotfuturespread__alert">
+            {this.state.message}
+            <div className="spinner-border text-warning" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </Alert>
+        ) : null}
+
         <div className="row d-flex justify-content-center">
           <Form.Group>
             <Form.Label>Select Index:</Form.Label>
@@ -272,6 +339,14 @@ class NiftyWeightage extends Component {
             />
           </Form.Group>
         </div>
+
+        {this.state.selectedIndex !== "" && this.state.timestamp !== "" ? (
+          <div className="row d-flex justify-content-center">
+            <p className="text-muted oivolume__contract-timestamp">
+              Last Updated - {this.state.timestamp}
+            </p>
+          </div>
+        ) : null}
 
         {this.state.selectedIndex !== "" ? (
           <div className="row">
@@ -315,7 +390,10 @@ class NiftyWeightage extends Component {
       <>
         {this.state.message !== "" ? (
           <Alert variant="danger" className="row spotfuturespread__alert">
-            {this.state.message + " - Check connection and reload the page"}
+            {this.state.message}
+            <div className="spinner-border text-warning" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
           </Alert>
         ) : null}
         <BoxLoading />

@@ -5,6 +5,10 @@ import { BoxLoading, CommonLoading } from "react-loadingg";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
+import InfoCard from "../../../Components/HMInfoCard";
+
+import store from "./../../../redux/store";
+import * as Helper from "./../../utils/helpers";
 import * as NseURL from "../../../app/utils/NSE_Urls";
 
 class HeatMap extends Component {
@@ -68,11 +72,14 @@ class HeatMap extends Component {
       timestamp: "",
       maxUp: true,
       trueRange: false,
+      message: ""
     };
     this.getIndicesList = this.getIndicesList.bind(this);
     this.getIndexData = this.getIndexData.bind(this);
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
     this.handleChangeSort = this.handleChangeSort.bind(this);
+    this.handleMaxUp = this.handleMaxUp.bind(this);
+    this.handleTrueRangeChange = this.handleTrueRangeChange.bind(this);
   }
 
   async getIndicesList() {
@@ -85,17 +92,17 @@ class HeatMap extends Component {
       if (Data) {
         this.setState({
           indicesList: Data,
+          message: ""
         });
       } else {
         this.setState({
-          loading: false,
           message: "Error Receiving Data",
           indicesList: {},
         });
       }
-      console.log("Indices List: ", this.state.indicesList);
+      // console.log("Indices List: ", this.state.indicesList);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
     }
   }
@@ -112,6 +119,7 @@ class HeatMap extends Component {
         this.setState({
           indexData: Data.data,
           timestamp: Data.timestamp,
+          message: ""
         });
       } else {
         this.setState({
@@ -122,14 +130,41 @@ class HeatMap extends Component {
       }
       console.log("Index Data: ", this.state.indexData);
     } catch (err) {
-      this.setState({ loading: true, message: err.message });
+      this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
     }
   }
 
+  setUpdateInterval = (time) => {
+    clearInterval(this.interval);
+    this.interval = setInterval(() => this.updateData(), time * 1000);
+  };
+
   async updateData() {
     if (!this.state.loading && this.state.indexName !== "") {
       await this.getIndexData(this.state.indexName);
+      this.setData();
+    }
+
+    if (this.state.message.length !== 0) {
+      this.setUpdateInterval(3);
+    } else {
+      this.setUpdateInterval(25);
+      await this.setState({ loading: false });
+    }
+
+    if (
+      Helper.checkMarketStatus(store.getState()) ||
+      this.state.message.length !== 0
+    ) {
+    } else {
+      console.log("Market Closed");
+      clearInterval(this.interval);
+    }
+  }
+
+  async updateDataLocal() {
+    if (!this.state.loading && this.state.indexName !== "") {
       this.setData();
     }
   }
@@ -139,21 +174,16 @@ class HeatMap extends Component {
     // this.getIndicesList();
     // this.getIndexData("NIFTY 50");
     await this.setState({ loading: false });
-    this.interval = setInterval(() => this.updateData(), 25000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  handleMaxUp = () => {
-    if (this.state.maxUp) {
-      this.setState({ maxUp: false });
-    } else {
-      this.setState({ maxUp: true });
-    }
-    this.updateData();
-  };
+  async handleMaxUp() {
+    await this.setState({ maxUp: !this.state.maxUp });
+    this.updateDataLocal();
+  }
 
   sortByPChange = (a, b) => {
     let comparison = 0;
@@ -218,8 +248,9 @@ class HeatMap extends Component {
               currentPrice: i.lastPrice,
               pchange: ((i.lastPrice - i.dayHigh) * 100) / i.dayHigh,
               change: i.lastPrice - i.dayHigh,
-              trueRange: (i.dayHigh - i.dayLow),
-              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
+              trueRange: i.dayHigh - i.dayLow,
+              trueRangePercent:
+                ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
             };
           } else if (this.state.sortBy === "Open to LTP") {
             return {
@@ -232,8 +263,9 @@ class HeatMap extends Component {
               currentPrice: i.lastPrice,
               pchange: ((i.lastPrice - i.open) * 100) / i.open,
               change: i.lastPrice - i.open,
-              trueRange: (i.dayHigh - i.dayLow),
-              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
+              trueRange: i.dayHigh - i.dayLow,
+              trueRangePercent:
+                ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
             };
           } else if (this.state.sortBy === "Low to LTP") {
             return {
@@ -246,8 +278,9 @@ class HeatMap extends Component {
               currentPrice: i.lastPrice,
               pchange: ((i.lastPrice - i.dayLow) * 100) / i.dayLow,
               change: i.lastPrice - i.dayLow,
-              trueRange: (i.dayHigh - i.dayLow),
-              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
+              trueRange: i.dayHigh - i.dayLow,
+              trueRangePercent:
+                ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
             };
           } else {
             return {
@@ -261,8 +294,9 @@ class HeatMap extends Component {
               pchange:
                 ((i.lastPrice - i.previousClose) * 100) / i.previousClose,
               change: i.lastPrice - i.previousClose,
-              trueRange: (i.dayHigh - i.dayLow),
-              trueRangePercent: ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
+              trueRange: i.dayHigh - i.dayLow,
+              trueRangePercent:
+                ((i.dayHigh - i.dayLow) * 100) / i.previousClose,
             };
           }
         })
@@ -270,7 +304,7 @@ class HeatMap extends Component {
         .sort(this.sortByTrueRange)
         .sort(this.sortByPriority),
     });
-    console.log("sortData: ", this.state.sortData);
+    // console.log("sortData: ", this.state.sortData);
   };
 
   async handleChangeIndex(value) {
@@ -279,6 +313,13 @@ class HeatMap extends Component {
       await this.getIndexData(value.label);
       this.setData();
       await this.setState({ loadingIndex: false, isSort: false });
+
+      if (this.state.message.length !== 0) {
+        this.setUpdateInterval(3);
+      } else {
+        this.setUpdateInterval(25);
+        await this.setState({ loading: false });
+      }
     } else {
       await this.setState({
         loadingIndex: false,
@@ -304,220 +345,163 @@ class HeatMap extends Component {
     }
   }
 
-  handleTrueRangeChange = () => {
-    this.setState({ trueRange: !this.state.trueRange });
-    this.updateData();
-  };
+  async handleTrueRangeChange() {
+    await this.setState({ trueRange: !this.state.trueRange });
+    this.updateDataLocal();
+  }
 
   render() {
     return (
-      <div className="heatmap">
-        {!this.state.loading ? (
-          <>
-            <div className="row d-flex justify-content-center">
-              <Form.Group>
-                <Form.Label>Select Index:</Form.Label>
-                <Select
-                  className="heatmap__select-index"
-                  inputId="select_index"
-                  TextFieldProps={{
-                    label: "Select Index: ",
-                    InputLabelProps: {
-                      htmlFor: "select_index",
-                      shrink: true,
-                    },
-                    placeholder: "Select Index",
-                  }}
-                  options={[
-                    ...this.state.indicesList.map((i) => {
-                      return {
-                        label: i,
-                      };
-                    }),
-                  ]}
-                  isClearable={true}
-                  onChange={this.handleChangeIndex}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Sort By:</Form.Label>
-                <Select
-                  className="heatmap__sort-by"
-                  inputId="sort-by"
-                  TextFieldProps={{
-                    label: "Sort By: ",
-                    InputLabelProps: {
-                      htmlFor: "sort-by",
-                      shrink: true,
-                    },
-                    placeholder: "Sort By",
-                  }}
-                  options={[
-                    ...this.state.sortByOptions.map((i) => {
-                      return {
-                        label: i,
-                      };
-                    }),
-                  ]}
-                  backspaceRemovesValue={false}
-                  isDisabled={this.state.isSort}
-                  defaultInputValue={this.state.sortByOptions[0]}
-                  onChange={this.handleChangeSort}
-                  isClearable={true}
-                />
-              </Form.Group>
-              <Form.Label>True Range:</Form.Label>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={this.state.trueRange}
-                    onChange={this.handleTrueRangeChange}
-                    value="true_range"
-                    color="primary"
-                    disabled={this.state.isSort}
-                  />
-                }
-                label={this.state.trueRange ? "ON " : "OFF"}
-              />
-
-              <Form.Label>Sort by Min/Max:</Form.Label>
-              {this.state.maxUp ? (
-                <Button
-                  className="btn btn-primary font-weight-bolder font-size-sm heatmap__max-min"
-                  onClick={this.handleMaxUp}
-                  disabled={this.state.isSort}
-                >
-                  MAX UP
-                </Button>
-              ) : (
-                <Button
-                  className="btn btn-dark font-weight-bolder font-size-sm heatmap__max-min"
-                  onClick={this.handleMaxUp}
-                  disabled={this.state.isSort}
-                >
-                  MIN UP
-                </Button>
-              )}
+      <>
+        {!this.state.loading && this.state.message !== "" ? (
+          <Alert variant="danger" className="row spotfuturespread__alert">
+            {this.state.message}
+            <div className="spinner-border text-warning" role="status">
+              <span className="sr-only">Loading...</span>
             </div>
-
-            {!this.state.isSort ? (
+          </Alert>
+        ) : null}
+        <div className="heatmap">
+          {!this.state.loading ? (
+            <>
               <div className="row d-flex justify-content-center">
-                <p className="text-muted oivolume__contract-timestamp">
-                  Last Updated - {this.state.timestamp}
-                </p>
-              </div>
-            ) : null}
+                <Form.Group>
+                  <Form.Label>Select Index:</Form.Label>
+                  <Select
+                    className="heatmap__select-index"
+                    inputId="select_index"
+                    TextFieldProps={{
+                      label: "Select Index: ",
+                      InputLabelProps: {
+                        htmlFor: "select_index",
+                        shrink: true,
+                      },
+                      placeholder: "Select Index",
+                    }}
+                    options={[
+                      ...this.state.indicesList.map((i) => {
+                        return {
+                          label: i,
+                        };
+                      }),
+                    ]}
+                    isClearable={true}
+                    onChange={this.handleChangeIndex}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Sort By:</Form.Label>
+                  <Select
+                    className="heatmap__sort-by"
+                    inputId="sort-by"
+                    TextFieldProps={{
+                      label: "Sort By: ",
+                      InputLabelProps: {
+                        htmlFor: "sort-by",
+                        shrink: true,
+                      },
+                      placeholder: "Sort By",
+                    }}
+                    options={[
+                      ...this.state.sortByOptions.map((i) => {
+                        return {
+                          label: i,
+                        };
+                      }),
+                    ]}
+                    backspaceRemovesValue={false}
+                    isDisabled={this.state.isSort}
+                    defaultInputValue={this.state.sortByOptions[0]}
+                    onChange={this.handleChangeSort}
+                    isClearable={true}
+                  />
+                </Form.Group>
 
-            {!this.state.loadingIndex ? (
-              <div className="row">
-                {this.state.sortData.map((i) => {
-                  return (
-                    <div
-                      className="col-lg-3 col-xxl-3 mb-3 animate__animated animate__fadeIn"
-                      key={i.symbol}
-                    >
-                      {i.pchange > 0 ? (
-                        <div className="col bg-light-success px-6 py-8 rounded-xl shadow heatmap__index">
-                          <div className="row mb-3">
-                            <p className="text-success font-weight-bolder h1 heatmap__index-title">
-                              {i.symbol}
-                            </p>
-                            <p className="text-secondary font-weight-bold h1 heatmap__index-value">
-                              {i.currentPrice.toLocaleString("hi-IN")}
-                            </p>
-                          </div>
-                          <div className="row text-success d-flex justify-content-center heatmap__index-percent">
-                            {i.pchange.toLocaleString("hi-IN", {
-                              maximumFractionDigits: 2,
-                            })}
-                            %{"  |  " + i.change.toLocaleString("hi-IN")}
-                          </div>
-                          {this.state.trueRange ? (
-                            <div className="row text-primary h3 d-flex justify-content-center animate__animated animate__bounceIn">
-                              True Range:{" "}
-                              {i.trueRangePercent.toLocaleString("hi-IN", {
-                                maximumFractionDigits: 2,
-                              })}% | {i.trueRange.toLocaleString("hi-IN")}
-                            </div>
-                          ) : null}
-                          <div className="row d-flex justify-content-center">
-                            <p className="text-warning heatmap__index-ohlc">
-                              {i.open.toLocaleString("hi-IN")}{" "}
-                              <span className="text-info">|</span>{" "}
-                              {i.high.toLocaleString("hi-IN")}{" "}
-                              <span className="text-info">|</span>{" "}
-                              {i.low.toLocaleString("hi-IN")}{" "}
-                              <span className="text-info">|</span>{" "}
-                              {i.close.toLocaleString("hi-IN")}
-                            </p>
-                          </div>
-                          <div className="row m-0 p-0 d-flex justify-content-center">
-                            <pre className="text-muted heatmap__index-ohlc-title">
-                              {"Open     High      Low     Close"}
-                            </pre>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="col bg-light-danger px-6 py-8 rounded-xl shadow heatmap__index">
-                          <div className="row mb-3">
-                            <p className="text-danger font-weight-bolder h1 heatmap__index-title">
-                              {i.symbol}
-                            </p>
-                            <p className="text-secondary font-weight-bold h1 heatmap__index-value">
-                              {i.currentPrice.toLocaleString("hi-IN")}
-                            </p>
-                          </div>
-                          <div className="row text-danger d-flex justify-content-center heatmap__index-percent">
-                            {i.pchange.toLocaleString("hi-IN", {
-                              maximumFractionDigits: 2,
-                            })}
-                            %{"  |  " + i.change.toLocaleString("hi-IN")}
-                          </div>
-                          {this.state.trueRange ? (
-                            <div className="row text-primary h3 d-flex justify-content-center animate__animated animate__bounceIn">
-                              True Range:{" "}
-                              {i.trueRangePercent.toLocaleString("hi-IN", {
-                                maximumFractionDigits: 2,
-                              })}% | {i.trueRange.toLocaleString("hi-IN")}
-                            </div>
-                          ) : null}
-                          <div className="row d-flex justify-content-center">
-                            <p className="text-warning heatmap__index-ohlc">
-                              {i.open.toLocaleString("hi-IN")}{" "}
-                              <span className="text-info">|</span>{" "}
-                              {i.high.toLocaleString("hi-IN")}{" "}
-                              <span className="text-info">|</span>{" "}
-                              {i.low.toLocaleString("hi-IN")}{" "}
-                              <span className="text-info">|</span>{" "}
-                              {i.close.toLocaleString("hi-IN")}
-                            </p>
-                          </div>
-                          <div className="row m-0 p-0 d-flex justify-content-center">
-                            <pre className="text-muted heatmap__index-ohlc-title">
-                              {"Open     High      Low     Close"}
-                            </pre>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                <div className="mr-10 ml-20">
+                  <div className="row">
+                    <Form.Label>True Range:</Form.Label>
+                  </div>
+                  <div className="row">
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={this.state.trueRange}
+                          onChange={this.handleTrueRangeChange}
+                          value="true_range"
+                          color="primary"
+                          disabled={this.state.isSort}
+                        />
+                      }
+                      label={this.state.trueRange ? "ON " : "OFF"}
+                    />
+                  </div>
+                </div>
+
+                <div className="mr-10 ml-20">
+                  <div className="row">
+                    <Form.Label>Sort by Min/Max:</Form.Label>
+                  </div>
+                  <div className="row">
+                    {this.state.maxUp ? (
+                      <Button
+                        className="btn btn-primary font-weight-bolder font-size-sm heatmap__max-min"
+                        onClick={this.handleMaxUp}
+                        disabled={this.state.isSort}
+                      >
+                        MAX UP
+                      </Button>
+                    ) : (
+                      <Button
+                        className="btn btn-dark font-weight-bolder font-size-sm heatmap__max-min"
+                        onClick={this.handleMaxUp}
+                        disabled={this.state.isSort}
+                      >
+                        MIN UP
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </div>
-            ) : (
-              <CommonLoading />
-            )}
-          </>
-        ) : (
-          <>
-            {this.state.message !== "" ? (
-              <Alert variant="danger" className="row spotfuturespread__alert">
-                {this.state.message + " - Check connection and reload the page"}
-              </Alert>
-            ) : null}
-            <BoxLoading />
-          </>
-        )}
-      </div>
+
+              {!this.state.isSort ? (
+                <div className="row d-flex justify-content-center">
+                  <p className="text-muted oivolume__contract-timestamp">
+                    Last Updated - {this.state.timestamp}
+                  </p>
+                </div>
+              ) : null}
+
+              {!this.state.loadingIndex ? (
+                <div className="row">
+                  {this.state.sortData.map((i) => {
+                    return (
+                      <InfoCard
+                        key={i.symbol}
+                        data={i}
+                        trueRange={this.state.trueRange}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <CommonLoading />
+              )}
+            </>
+          ) : (
+            <>
+              {this.state.message !== "" ? (
+                <Alert variant="danger" className="row spotfuturespread__alert">
+                  {this.state.message}
+                  <div className="spinner-border text-warning" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                </Alert>
+              ) : null}
+              <BoxLoading />
+            </>
+          )}
+        </div>
+      </>
     );
   }
 }
