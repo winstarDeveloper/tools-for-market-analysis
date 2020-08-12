@@ -35,7 +35,7 @@ class ViewAllCommodities extends Component {
           allCommodity: [],
         });
       }
-      console.log("All Commodities: ", this.state.allCommodity);
+      // console.log("All Commodities: ", this.state.allCommodity);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);

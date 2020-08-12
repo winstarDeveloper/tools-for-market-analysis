@@ -171,7 +171,7 @@ class NiftyWeightage extends Component {
             },
           ];
         });
-        console.log("All Data: ", mktCapList);
+        // console.log("All Data: ", mktCapList);
       })
       .catch(function(error) {
         console.log("Error All: ", error);

@@ -67,7 +67,7 @@ class ViewAllIndices extends Component {
       this.state.message.length !== 0
     ) {
     } else {
-      console.log("Market Closed");
+      // console.log("Market Closed");
       clearInterval(this.interval);
     }
   }

@@ -47,7 +47,7 @@ class MainDashboard extends Component {
           marketStatus: [],
         });
       }
-      console.log("Market Status: ", this.state.marketStatus);
+      // console.log("Market Status: ", this.state.marketStatus);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
@@ -72,7 +72,7 @@ class MainDashboard extends Component {
           allIndices: [],
         });
       }
-      console.log("All Indices: ", this.state.allIndices);
+      // console.log("All Indices: ", this.state.allIndices);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
@@ -98,7 +98,7 @@ class MainDashboard extends Component {
           allCommodity: [],
         });
       }
-      console.log("All Commodities: ", this.state.allCommodity);
+      // console.log("All Commodities: ", this.state.allCommodity);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
@@ -127,12 +127,12 @@ class MainDashboard extends Component {
           allCommodity: [],
         });
       }
-      console.log(
-        "Gainers: ",
-        this.state.gainers,
-        "Loosers:",
-        this.state.loosers
-      );
+      // console.log(
+      //   "Gainers: ",
+      //   this.state.gainers,
+      //   "Loosers:",
+      //   this.state.loosers
+      // );
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
@@ -150,7 +150,6 @@ class MainDashboard extends Component {
       this.setUpdateInterval(25);
       await this.setState({ loading: false });
     }
-    console.log("On Error");
   }
 
   async updateData() {
@@ -161,7 +160,7 @@ class MainDashboard extends Component {
     ) {
       
     } else {
-      console.log("Market Closed");
+      // console.log("Market Closed");
       clearInterval(this.interval);
     }
   };

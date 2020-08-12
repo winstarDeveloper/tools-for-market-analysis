@@ -76,7 +76,7 @@ class OptionGreeksCalculator extends Component {
           data: [],
         });
       }
-      console.log("Data: ", this.state.data);
+      // console.log("Data: ", this.state.data);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
@@ -104,7 +104,7 @@ class OptionGreeksCalculator extends Component {
           data: {},
         });
       }
-      console.log("Option Chain Data: ", this.state.optionChainData);
+      // console.log("Option Chain Data: ", this.state.optionChainData);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
@@ -132,7 +132,7 @@ class OptionGreeksCalculator extends Component {
           data: {},
         });
       }
-      console.log("Option Chain Data: ", this.state.optionChainData);
+      // console.log("Option Chain Data: ", this.state.optionChainData);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
       console.log("Error: ", err.message);
@@ -182,7 +182,7 @@ class OptionGreeksCalculator extends Component {
       this.state.message.length !== 0
     ) {
     } else {
-      console.log("Market Closed");
+      // console.log("Market Closed");
       clearInterval(this.interval);
     }
   }
