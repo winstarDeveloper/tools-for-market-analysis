@@ -102,7 +102,7 @@ class NiftyWeightage extends Component {
   async getMarketCap(stockName) {
     try {
       const quote_data_url =
-        NseURL.Nse_main_URL + NseURL.QuoteInfoURL + stockName;
+        NseURL.Nse_main_URL_2 + NseURL.QuoteInfoURL + stockName;
 
       const response = await fetch(quote_data_url);
       const Data = await response.json();
@@ -136,6 +136,10 @@ class NiftyWeightage extends Component {
 
   async componentDidMount() {
     await this.setState({ loading: false });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   async getStockMarketCaps() {
