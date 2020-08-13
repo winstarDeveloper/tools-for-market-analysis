@@ -49,7 +49,7 @@ class MainDashboard extends Component {
       }
       // console.log("Market Status: ", this.state.marketStatus);
     } catch (err) {
-      this.setState({ message: "Error Retrieving Data - Retrying " });
+      this.setState({ message: this.state.message + "Err1 " });
       console.log("Error: ", err.message);
     }
   }
@@ -74,7 +74,7 @@ class MainDashboard extends Component {
       }
       // console.log("All Indices: ", this.state.allIndices);
     } catch (err) {
-      this.setState({ message: "Error Retrieving Data - Retrying " });
+      this.setState({ message: this.state.message + "Err2 " });
       console.log("Error: ", err.message);
     }
   }
@@ -100,7 +100,7 @@ class MainDashboard extends Component {
       }
       // console.log("All Commodities: ", this.state.allCommodity);
     } catch (err) {
-      this.setState({ message: "Error Retrieving Data - Retrying " });
+      this.setState({ message: this.state.message + "Err3 " });
       console.log("Error: ", err.message);
     }
   }
@@ -134,7 +134,7 @@ class MainDashboard extends Component {
       //   this.state.loosers
       // );
     } catch (err) {
-      this.setState({ message: "Error Retrieving Data - Retrying " });
+      this.setState({ message: this.state.message + "Err4 " });
       console.log("Error: ", err.message);
     }
   }
@@ -144,26 +144,25 @@ class MainDashboard extends Component {
     await this.getAllIndices();
     await this.getCommodity();
     await this.getGainersLoosers();
-    if (this.state.message.length !== 0) {
-      this.setUpdateInterval(3);
-    } else {
-      this.setUpdateInterval(25);
-      await this.setState({ loading: false });
-    }
   }
 
   async updateData() {
     await this.updateDataOnError();
-    if (
-      Helper.checkMarketStatus(store.getState()) ||
-      this.state.message.length !== 0
-    ) {
-      
+
+    if (this.state.message.length !== 0) {
+      this.setUpdateInterval(3);
+      return;
     } else {
-      // console.log("Market Closed");
-      clearInterval(this.interval);
+      this.setUpdateInterval(25);
+      await this.setState({ loading: false });
+    
+      if (Helper.checkMarketStatus(store.getState())) {
+      } else {
+        console.log("Market Closed");
+        clearInterval(this.interval);
+      }
     }
-  };
+  }
 
   setUpdateInterval = (time) => {
     clearInterval(this.interval);
@@ -202,7 +201,7 @@ class MainDashboard extends Component {
       <>
         {this.state.message !== "" ? (
           <Alert variant="danger" className="row spotfuturespread__alert">
-            {this.state.message}
+            {"Error Retrieving Data - Retrying "}
             <div className="spinner-border text-warning" role="status">
               <span className="sr-only">Loading...</span>
             </div>
@@ -433,7 +432,7 @@ class MainDashboard extends Component {
       <>
         {this.state.message !== "" ? (
           <Alert variant="danger" className="row spotfuturespread__alert">
-            {this.state.message}
+            {"Error Retrieving Data - Retrying "}
             <div className="spinner-border text-warning" role="status">
               <span className="sr-only">Loading...</span>
             </div>

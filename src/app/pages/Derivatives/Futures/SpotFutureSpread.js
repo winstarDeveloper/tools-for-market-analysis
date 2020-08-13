@@ -105,9 +105,16 @@ class SpotFutureSpread extends Component {
 
     if (this.state.message.length !== 0) {
       this.setUpdateInterval(3);
+      return;
     } else {
       this.setUpdateInterval(25);
       await this.setState({ loading: false });
+
+      if (Helper.checkMarketStatus(store.getState())) {
+      } else {
+        console.log("Market Closed");
+        clearInterval(this.interval);
+      }
     }
 
     if (this.state.searchFor !== "") {
@@ -134,15 +141,6 @@ class SpotFutureSpread extends Component {
           p_d: _p_d,
         },
       });
-    }
-
-    if (
-      Helper.checkMarketStatus(store.getState()) ||
-      this.state.message.length !== 0
-    ) {
-    } else {
-      // console.log("Market Closed");
-      clearInterval(this.interval);
     }
   }
 

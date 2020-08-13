@@ -10,7 +10,29 @@ import { Routes } from "../app/Routes";
 import { I18nProvider } from "../_metronic/i18n";
 import { LayoutSplashScreen, MaterialThemeProvider } from "../_metronic/layout";
 
+import store from "./../redux/store";
+import * as MarketStatus from "./../redux/dataObjects/marketStatus";
+import * as NseURL from "./utils/NSE_Urls";
+
+ async function getMarketStatus () {
+  try {
+    const market_status_url = NseURL.Nse_main_URL + NseURL.MarketStatusURL;
+
+    const response = await fetch(market_status_url);
+    const Data = await response.json();
+
+    if (Data) {
+      store.dispatch(MarketStatus.actions.addMarketStatus(Data.marketState));
+    }
+    // console.log("Market Status: ", this.state.marketStatus);
+  } catch (err) {
+    setTimeout(getMarketStatus, 3000);
+    console.log("Error: ", err.message);
+  }
+}
+
 export default function App({ store, persistor, basename }) {
+  getMarketStatus();
   return (
     /* Provide Redux store */
     <Provider store={store}>

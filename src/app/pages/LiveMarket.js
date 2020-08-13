@@ -1,11 +1,6 @@
 import React from "react";
+import UnderConstruction from "./../../Components/UnderConstruction";
 
 export function LiveMarket() {
-  return (
-    <>
-      <div className="row">
-      
-       </div>
-    </>
-  );
+  return <UnderConstruction />;
 }

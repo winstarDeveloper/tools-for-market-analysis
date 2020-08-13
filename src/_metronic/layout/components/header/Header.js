@@ -1,7 +1,7 @@
 import React, {useMemo} from "react";
 import objectPath from "object-path";
 import {useHtmlClassService} from "../../_core/MetronicLayout";
-import {Topbar} from "./Topbar";
+// import {Topbar} from "./Topbar";
 import {HeaderMenuWrapper} from "./header-menu/HeaderMenuWrapper";
 import {AnimateLoading} from "../../../_partials/controls";
 
@@ -37,7 +37,7 @@ export function Header() {
           {/*end::Header Menu Wrapper*/}
 
           {/*begin::Topbar*/}
-          <Topbar />
+          {/* <Topbar /> */}
           {/*end::Topbar*/}
         </div>
         {/*end::Container*/}

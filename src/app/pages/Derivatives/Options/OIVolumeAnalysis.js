@@ -145,15 +145,12 @@ class OIVolumeAnalysis extends Component {
     } else {
       this.setUpdateInterval(25, this.state.contractName);
       await this.setState({ loading: false });
-    }
 
-    if (
-      Helper.checkMarketStatus(store.getState()) ||
-      this.state.message.length !== 0
-    ) {
-    } else {
-      // console.log("Market Closed");
-      clearInterval(this.interval);
+      if (Helper.checkMarketStatus(store.getState())) {
+      } else {
+        console.log("Market Closed");
+        clearInterval(this.interval);
+      }
     }
   }
 

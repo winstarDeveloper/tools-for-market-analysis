@@ -26,7 +26,7 @@ class OptionGreeksCalculator extends Component {
       showFields: false,
       strikePrices: [],
       volatility: 0.0,
-      interest: 3.29,
+      interest: 3.2689,
       dividend: 0.0,
       optionType: "call-option", // 'put-option',
       strikePrice: "",
@@ -175,15 +175,12 @@ class OptionGreeksCalculator extends Component {
     } else {
       this.setUpdateInterval(25, this.state.contractName);
       await this.setState({ loading: false });
-    }
 
-    if (
-      Helper.checkMarketStatus(store.getState()) ||
-      this.state.message.length !== 0
-    ) {
-    } else {
-      // console.log("Market Closed");
-      clearInterval(this.interval);
+      if (Helper.checkMarketStatus(store.getState())) {
+      } else {
+        console.log("Market Closed");
+        clearInterval(this.interval);
+      }
     }
   }
 
@@ -438,12 +435,12 @@ class OptionGreeksCalculator extends Component {
       <div className="optiongreeks">
         {!this.state.loading ? (
           <>
-            {this.state.errorValues && this.state.contractName !== "" ? (
+            {/* {this.state.errorValues && this.state.contractName !== "" ? (
               <Alert variant="danger" className="row spotfuturespread__alert">
                 {this.state.message}
               </Alert>
-            ) : null}
-            { this.state.message !== "" ? (
+            ) : null} */}
+            {this.state.message !== "" ? (
               <Alert variant="danger" className="row spotfuturespread__alert">
                 {this.state.message}
                 <div className="spinner-border text-warning" role="status">

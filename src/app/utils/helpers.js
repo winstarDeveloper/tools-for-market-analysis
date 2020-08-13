@@ -1,6 +1,6 @@
 export const checkMarketStatus = ({marketStatus}) => {
-  if (marketStatus.marketState) {
-    const mktStatus = marketStatus.marketState;
+  if (marketStatus.marketStatus) {
+    const mktStatus = marketStatus.marketStatus;
     for (let i = 0; i < mktStatus.length; i++) {
       if (
         mktStatus[i].market === "Capital Market" &&

@@ -152,7 +152,7 @@ class NiftyWeightage extends Component {
     let msg = "";
     await Promise.all(
       this.state.stockList.map((stockName) => {
-        return fetch(NseURL.Nse_main_URL + NseURL.QuoteInfoURL + stockName);
+        return fetch(NseURL.Nse_main_URL_2 + NseURL.QuoteInfoURL + stockName);
       })
     )
       .then(function(responses) {

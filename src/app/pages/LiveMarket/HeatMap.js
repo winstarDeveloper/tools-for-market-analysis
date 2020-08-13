@@ -72,7 +72,7 @@ class HeatMap extends Component {
       timestamp: "",
       maxUp: true,
       trueRange: false,
-      message: ""
+      message: "",
     };
     this.getIndicesList = this.getIndicesList.bind(this);
     this.getIndexData = this.getIndexData.bind(this);
@@ -92,7 +92,7 @@ class HeatMap extends Component {
       if (Data) {
         this.setState({
           indicesList: Data,
-          message: ""
+          message: "",
         });
       } else {
         this.setState({
@@ -119,7 +119,7 @@ class HeatMap extends Component {
         this.setState({
           indexData: Data.data,
           timestamp: Data.timestamp,
-          message: ""
+          message: "",
         });
       } else {
         this.setState({
@@ -148,18 +148,16 @@ class HeatMap extends Component {
 
     if (this.state.message.length !== 0) {
       this.setUpdateInterval(3);
+      return;
     } else {
       this.setUpdateInterval(25);
       await this.setState({ loading: false });
-    }
-
-    if (
-      Helper.checkMarketStatus(store.getState()) ||
-      this.state.message.length !== 0
-    ) {
-    } else {
-      // console.log("Market Closed");
-      clearInterval(this.interval);
+    
+      if (Helper.checkMarketStatus(store.getState())) {
+      } else {
+        console.log("Market Closed");
+        clearInterval(this.interval);
+      }
     }
   }
 
