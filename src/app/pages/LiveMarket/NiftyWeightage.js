@@ -179,11 +179,11 @@ class NiftyWeightage extends Component {
       })
       .catch(function(error) {
         console.log("Error All: ", error);
-        msg = "Error Retrieving Data - Retrying ";
+        msg = "Error CORS Issue - Retrying - Please see About";
       });
 
     mktCapList.length === 0
-      ? this.setState({ message: "Error CORS Issue - Retrying ", marketCapList: [] })
+      ? this.setState({ message: "Error CORS Issue - Retrying - Please see About", marketCapList: [] })
       : this.setState({ message: msg, marketCapList: mktCapList });
   }
 
