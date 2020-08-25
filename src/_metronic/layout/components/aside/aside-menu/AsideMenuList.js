@@ -187,6 +187,23 @@ export function AsideMenuList({ layoutProps }) {
                           </span>
                         </NavLink>
                       </li>
+                      <li
+                        className={`menu-item ${getMenuItemActive(
+                          "/derivative/futures"
+                        )}`}
+                      >
+                        <NavLink
+                          className="menu-link"
+                          to="/derivative/futures/sentimentanalysis"
+                        >
+                          <i className="menu-bullet menu-bullet-dot">
+                            <span />
+                          </i>
+                          <span className="menu-text">
+                            Sentiment Analysis
+                          </span>
+                        </NavLink>
+                      </li>
                       {/*end::3 Level*/}
                     </ul>
                   </div>

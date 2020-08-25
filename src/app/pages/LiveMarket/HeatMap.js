@@ -172,6 +172,7 @@ class HeatMap extends Component {
     // this.getIndicesList();
     // this.getIndexData("NIFTY 50");
     await this.setState({ loading: false });
+    this.updateData();
   }
 
   componentWillUnmount() {

@@ -1,0 +1,24 @@
+.sentimentanalysis {
+    &__enctoken {
+        width: 50%;
+        margin:1rem;
+        min-width: 35rem;
+        margin-bottom: 2rem;
+    }
+
+    &__select-symbol {
+        width: 25rem;
+        margin:1rem;
+    }
+
+    &__select-contract {
+        width: 25rem;
+        margin:1rem;
+    }
+
+    &__percent-input{
+        width: 15rem;
+        min-width: 10rem;
+        margin-left: 1rem;
+    }
+}

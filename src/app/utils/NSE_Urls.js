@@ -15,3 +15,6 @@ export const LoosersURL = "live-analysis-variations?index=loosers";
 export const IndicesListURL = "equity-master";
 export const IndexDataURL = "equity-stockIndices?index=";
 export const QuoteInfoURL = "quote-equity?section=trade_info&symbol=";
+export const DerivativeInfoURL = "quote-derivative?symbol=";
+
+export const NSEFutures = "https://api.kite.trade/instruments/NFO";

@@ -11,6 +11,7 @@ import HeatMap from "./pages/LiveMarket/HeatMap";
 import NiftyWeightage from "./pages/LiveMarket/NiftyWeightage";
 import { DerivativeAnalysis } from "./pages/DerivativeAnalysis";
 import  SpotFutureSpread from "./pages/Derivatives/Futures/SpotFutureSpread";
+import  SentimentAnalysis from "./pages/Derivatives/Futures/SentimentAnalysis";
 import  OptionChain from "./pages/Derivatives/Options/OptionChain";
 import  OptionChainHistoricalData from "./pages/Derivatives/Options/OptionChainHistoricalData";
 import  OIVolumeAnalysis from "./pages/Derivatives/Options/OIVolumeAnalysis";
@@ -47,6 +48,7 @@ export default function BasePage() {
         <ContentRoute path="/livemarket/niftyweightage" component={NiftyWeightage} />
         <ContentRoute path="/livemarket" component={LiveMarket} />
         <ContentRoute path="/derivative/futures/spotfutspread" component={SpotFutureSpread} />
+        <ContentRoute path="/derivative/futures/sentimentanalysis" component={SentimentAnalysis} />
         <ContentRoute path="/derivative/options/optionchain" component={OptionChain} />
         <ContentRoute path="/derivative/options/optionchainhistoricaldata" component={OptionChainHistoricalData} />
         <ContentRoute path="/derivative/options/oi-vol-analysis" component={OIVolumeAnalysis} />

@@ -280,3 +280,22 @@ body {
 
 .optiongreeks__option-type {
   margin: 1rem; }
+
+.sentimentanalysis__enctoken {
+  width: 50%;
+  margin: 1rem;
+  min-width: 35rem;
+  margin-bottom: 2rem; }
+
+.sentimentanalysis__select-symbol {
+  width: 25rem;
+  margin: 1rem; }
+
+.sentimentanalysis__select-contract {
+  width: 25rem;
+  margin: 1rem; }
+
+.sentimentanalysis__percent-input {
+  width: 15rem;
+  min-width: 10rem;
+  margin-left: 1rem; }
