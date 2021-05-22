@@ -9,11 +9,4 @@
 
 - Live: https://financial-wizard.herokuapp.com/dashboard
 
-## Todo
-
-- Dashboard
-   - Market open or closed
-   - Major Index and Stocks price
-   - Gainers and Losers
-   - Event Calendar
    

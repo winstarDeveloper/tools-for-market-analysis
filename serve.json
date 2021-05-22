@@ -1,4 +1,5 @@
 {
+  "_comment" : "Metronic config",
   "public": "_site",
   "redirects": [
     {
