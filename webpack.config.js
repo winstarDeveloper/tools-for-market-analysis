@@ -1,5 +1,5 @@
 /**
- * Main file of webpack config.
+ * Main file of webpack config
  * Please do not modified unless you know what to do
  */
 const path = require("path");
