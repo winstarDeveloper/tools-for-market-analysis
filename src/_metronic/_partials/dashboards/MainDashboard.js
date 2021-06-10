@@ -155,7 +155,7 @@ class MainDashboard extends Component {
     } else {
       this.setUpdateInterval(25);
       await this.setState({ loading: false });
-    
+
       if (Helper.checkMarketStatus(store.getState())) {
       } else {
         console.log("Market Closed");
@@ -201,7 +201,7 @@ class MainDashboard extends Component {
       <>
         {this.state.message !== "" ? (
           <Alert variant="danger" className="row spotfuturespread__alert">
-            {"Error Retrieving Data - Retrying "}
+            {"Error Retrieving Data - Please Click on About - Retrying "}
             <div className="spinner-border text-warning" role="status">
               <span className="sr-only">Loading...</span>
             </div>
@@ -432,7 +432,7 @@ class MainDashboard extends Component {
       <>
         {this.state.message !== "" ? (
           <Alert variant="danger" className="row spotfuturespread__alert">
-            {"Error Retrieving Data - Retrying "}
+            {"Error Retrieving Data - Please Click on About - Retrying "}
             <div className="spinner-border text-warning" role="status">
               <span className="sr-only">Loading...</span>
             </div>

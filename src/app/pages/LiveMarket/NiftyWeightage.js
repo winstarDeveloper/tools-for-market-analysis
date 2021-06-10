@@ -95,7 +95,7 @@ class NiftyWeightage extends Component {
         message: "Error Retrieving Data - Retrying ",
         stockList: [],
       });
-      console.log("Error: ", err.message);
+      //console.log("Error: ", err.message);
     }
   }
 
@@ -130,7 +130,7 @@ class NiftyWeightage extends Component {
       // console.log("Market Cap: ", this.state.marketCapList);
     } catch (err) {
       this.setState({ message: "Error Retrieving Data - Retrying " });
-      console.log("Error: ", err.message);
+      //console.log("Error: ", err.message);
     }
   }
 
@@ -183,7 +183,10 @@ class NiftyWeightage extends Component {
       });
 
     mktCapList.length === 0
-      ? this.setState({ message: "Error CORS Issue - Retrying - Please see About", marketCapList: [] })
+      ? this.setState({
+          message: "Error CORS Issue - Retrying - Please see About",
+          marketCapList: [],
+        })
       : this.setState({ message: msg, marketCapList: mktCapList });
   }
 
@@ -281,7 +284,7 @@ class NiftyWeightage extends Component {
       if (this.state.message.length !== 0) {
         this.setUpdateInterval(3, value);
         return;
-      }else{
+      } else {
         clearInterval(this.interval);
       }
 

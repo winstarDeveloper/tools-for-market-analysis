@@ -37,17 +37,41 @@ export default class PageInfo extends Component {
             <p className="text-justify lead">
               This website provides Free Capital Market Analysis tools.
               Developed by Prayush Kale with help from his friend Himanshu
-              Chaudhary who is a Trader by profession.
+              Chaudhary who is a Retail Trader by profession.
             </p>
 
             <p className="text-justify lead">
+              {/* 
               The website was created as result of requirements specified by
               Himanshu. He needed some specific Market data visualized in a
-              proper way, which was not freely available online. All data here
-              is as provided by NSE. I do not take any liability for the data
-              provided here, your market decisions based on data given here is
-              your own Risk. The data is Live and refreshes automatically about
-              every 30 seconds.
+              proper way, which was not freely available online. 
+              */}
+              All data here is as provided by NSE. I do not take any liability
+              for the data provided here, your market decisions based on data
+              given here is your own Risk. The data is Live and refreshes
+              automatically about every 30 seconds.
+            </p>
+
+            <p className="text-center lead">
+              <b>** Important Note **</b>
+            </p>
+
+            <p className="text-center lead">
+              You need to have CORS disabled on your Browser for this page to
+              work. Install this Extension for Chrome and <b>Turn it ON: </b>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf"
+              >
+                Click here
+              </a>
+              <br />
+              For other browsers just search for "allow cors plugin [browser
+              name]".
+              <br />
+              Once done make sure to disable or uninstall the Extension or
+              Plugin.
             </p>
 
             <p className="text-center lead">
@@ -92,7 +116,11 @@ export default class PageInfo extends Component {
               <br />
               You need to have CORS disabled on your Browser for this page to
               work. Install this Extension for Chrome and Turn it ON:{" "}
-              <a target="_blank" rel="noopener noreferrer" href="https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf"
+              >
                 Click here
               </a>
               <br />
@@ -105,38 +133,41 @@ export default class PageInfo extends Component {
           </>
         );
 
-        case "Spot and Future Spread":
+      case "Spot and Future Spread":
         return (
           <>
             <p className="text-center lead">
-              This page shows the Premium/Discount between Spot and Future price for the selected Contract. 
-              Min/Max values are correct only from the point you load the page.
+              This page shows the Premium/Discount between Spot and Future price
+              for the selected Contract. Min/Max values are correct only from
+              the point you load the page.
             </p>
           </>
         );
 
-        case "OI and Volume Analysis":
+      case "OI and Volume Analysis":
         return (
           <>
             <p className="text-center lead">
-              This page displays Option Chain data in concise form. Contracts can be sorted by OI and Volume.
+              This page displays Option Chain data in concise form. Contracts
+              can be sorted by OI and Volume.
             </p>
           </>
         );
 
-        case "Option Greeks Calculator":
+      case "Option Greeks Calculator":
         return (
           <>
             <p className="text-center lead">
-              This page calculates Option Greeks based on 'Black & Scholes Option Pricing Formula'. 
-              Interest rate is 91-days T-bill interest as provided on RBI which can be updated. 
-              Volatility is auto updated and is as per data on NSE Option Chain.
+              This page calculates Option Greeks based on 'Black & Scholes
+              Option Pricing Formula'. Interest rate is 91-days T-bill interest
+              as provided on RBI which can be updated. Volatility is auto
+              updated and is as per data on NSE Option Chain.
             </p>
           </>
         );
 
       default:
-        return  <p className="text-center lead">This Page has no Info</p>;
+        return <p className="text-center lead">This Page has no Info</p>;
     }
   };
 
