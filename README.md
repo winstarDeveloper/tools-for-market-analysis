@@ -1,3 +1,5 @@
+## Outdated - Links broken
+
 ## Tools for Stock Market Analysis
 
 - Provides free of cost Market Data Visualization Tools. Few of the features include,
